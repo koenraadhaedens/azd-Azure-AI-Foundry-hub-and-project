@@ -22,7 +22,7 @@ param adminUsername string
 param adminPassword string
 
 @description('Size of the VM')
-param vmSize string = 'Standard_D4s_v5'
+param vmSize string = 'Standard_D2s_v6'
 
 @description('Windows Server image SKU')
 @allowed([

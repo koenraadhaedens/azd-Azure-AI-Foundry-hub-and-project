@@ -49,7 +49,7 @@ param vmAdminPassword string
 param aadObjectIdForOwners array = []
 
 @description('VM Size for the Windows jumpbox')
-param vmSize string = 'Standard_D2s_v5'
+param vmSize string = 'Standard_D2s_v6'
 
 // =====================================================
 // VARIABLES
