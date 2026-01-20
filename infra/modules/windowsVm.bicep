@@ -26,11 +26,12 @@ param vmSize string = 'Standard_D4s_v5'
 
 @description('Windows Server image SKU')
 @allowed([
-  '2019-datacenter-gensecond'
   '2022-datacenter-g2'
   '2022-datacenter-azure-edition'
+  '2025-datacenter-g2'
+  '2025-datacenter-azure-edition'
 ])
-param windowsOSVersion string = '2022-datacenter-g2'
+param windowsOSVersion string = '2025-datacenter-azure-edition'
 
 @description('OS disk type')
 @allowed([
@@ -150,6 +151,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
 
 // ============================================================================
 // Custom Script Extension - Install Edge, VS Code, Azure CLI, etc.
+// Uses winget (pre-installed on Windows Server 2025)
 // ============================================================================
 
 resource customScript 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = {
@@ -165,19 +167,63 @@ resource customScript 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' 
     settings: {
       commandToExecute: '''
         powershell -ExecutionPolicy Bypass -Command "
-          # Install Chocolatey
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
+          Start-Transcript -Path C:\\WindowsAzure\\Logs\\DevToolsInstall.log -Append;
           
-          # Install common tools
-          choco install -y microsoft-edge googlechrome vscode azure-cli git powershell-core;
+          # Wait for winget to be available (Windows Server 2025 has it pre-installed)
+          $attempts = 0;
+          while (-not (Get-Command winget -ErrorAction SilentlyContinue) -and $attempts -lt 10) {
+            Write-Host 'Waiting for winget to be available...';
+            Start-Sleep -Seconds 30;
+            $attempts++;
+          }
+          
+          if (Get-Command winget -ErrorAction SilentlyContinue) {
+            Write-Host 'Installing applications with winget...';
+            
+            # Accept source agreements
+            winget source update;
+            
+            # Install Microsoft Edge
+            winget install -e --id Microsoft.Edge --accept-source-agreements --accept-package-agreements -h;
+            
+            # Install Google Chrome
+            winget install -e --id Google.Chrome --accept-source-agreements --accept-package-agreements -h;
+            
+            # Install VS Code
+            winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements -h;
+            
+            # Install Azure CLI
+            winget install -e --id Microsoft.AzureCLI --accept-source-agreements --accept-package-agreements -h;
+            
+            # Install Git
+            winget install -e --id Git.Git --accept-source-agreements --accept-package-agreements -h;
+            
+            # Install PowerShell 7
+            winget install -e --id Microsoft.PowerShell --accept-source-agreements --accept-package-agreements -h;
+            
+            Write-Host 'Winget installations completed.';
+          } else {
+            Write-Host 'Winget not available, falling back to direct downloads...';
+            
+            # Fallback: Install Azure CLI directly
+            $ProgressPreference = 'SilentlyContinue';
+            Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\\AzureCLI.msi;
+            Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet' -Wait;
+            Remove-Item .\\AzureCLI.msi -Force;
+            
+            # Fallback: Install VS Code directly
+            Invoke-WebRequest -Uri 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64' -OutFile .\\VSCodeSetup.exe;
+            Start-Process -FilePath .\\VSCodeSetup.exe -ArgumentList '/VERYSILENT /MERGETASKS=!runcode' -Wait;
+            Remove-Item .\\VSCodeSetup.exe -Force;
+          }
           
           # Create desktop shortcut for AI Foundry
           $WshShell = New-Object -ComObject WScript.Shell;
           $Shortcut = $WshShell.CreateShortcut('C:\\Users\\Public\\Desktop\\Azure AI Foundry.url');
           $Shortcut.TargetPath = 'https://ai.azure.com';
           $Shortcut.Save();
+          
+          Stop-Transcript;
         "
       '''
     }
