@@ -166,6 +166,7 @@ resource customScript 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' 
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
+    forceUpdateTag: '${uniqueString(resourceGroup().id, deployment().name)}'
     settings: {
       fileUris: [
         devToolsScriptUrl
