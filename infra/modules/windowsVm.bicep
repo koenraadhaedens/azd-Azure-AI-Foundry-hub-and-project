@@ -48,7 +48,7 @@ param osDiskSizeGB int = 128
 param enableAutoShutdown bool = true
 
 @description('URL to the PowerShell script for installing dev tools')
-param devToolsScriptUrl string = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/infra/scripts/Install-DevTools.ps1'
+param devToolsScriptUrl string = 'https://raw.githubusercontent.com/koenraadhaedens/azd-Azure-AI-Foundry-hub-and-project/main/infra/scripts/Install-DevTools.ps1'
 
 @description('Auto-shutdown time in HHmm format (UTC)')
 param autoShutdownTime string = '1900'
