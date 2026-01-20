@@ -3,16 +3,16 @@
 # PowerShell script to install development tools on Windows Server jumpbox
 # ============================================================================
 
-param(
-    [string]$LogPath = "C:\WindowsAzure\Logs\DevToolsInstall.log"
-)
+$ErrorActionPreference = "Continue"
+$ProgressPreference = "SilentlyContinue"
 
+$LogPath = "C:\WindowsAzure\Logs\DevToolsInstall.log"
 Start-Transcript -Path $LogPath -Append -Force
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Starting Dev Tools Installation" -ForegroundColor Cyan
-Write-Host "Timestamp: $(Get-Date)" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "========================================"
+Write-Host "Starting Dev Tools Installation"
+Write-Host "Timestamp: $(Get-Date)"
+Write-Host "========================================"
 
 # Ensure TLS 1.2 for downloads
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -35,36 +35,37 @@ function Install-WithDownload {
         [string]$Arguments
     )
     
-    Write-Host "`n[$Name] Starting installation via direct download..." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "[$Name] Starting installation..."
     
     try {
         $filePath = Join-Path $tempDir $FileName
         
         Write-Host "[$Name] Downloading from: $Url"
-        $ProgressPreference = 'SilentlyContinue'
         Invoke-WebRequest -Uri $Url -OutFile $filePath -UseBasicParsing -ErrorAction Stop
         
         if (Test-Path $filePath) {
-            Write-Host "[$Name] Download complete. File size: $((Get-Item $filePath).Length / 1MB) MB"
+            $fileSize = [math]::Round((Get-Item $filePath).Length / 1MB, 2)
+            Write-Host "[$Name] Download complete. File size: $fileSize MB"
             
             if ($FileName -like "*.msi") {
                 Write-Host "[$Name] Installing MSI..."
-                $process = Start-Process msiexec.exe -ArgumentList "/i `"$filePath`" $Arguments" -Wait -PassThru -NoNewWindow
+                $process = Start-Process msiexec.exe -ArgumentList "/i `"$filePath`" $Arguments" -Wait -PassThru
             } else {
                 Write-Host "[$Name] Running installer..."
-                $process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait -PassThru -NoNewWindow
+                $process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait -PassThru
             }
             
             Write-Host "[$Name] Installer exit code: $($process.ExitCode)"
             Remove-Item $filePath -Force -ErrorAction SilentlyContinue
-            Write-Host "[$Name] Installation completed." -ForegroundColor Green
+            Write-Host "[$Name] Installation completed."
             return $true
         } else {
-            Write-Host "[$Name] Download failed - file not found." -ForegroundColor Red
+            Write-Host "[$Name] Download failed - file not found."
             return $false
         }
     } catch {
-        Write-Host "[$Name] Installation failed: $_" -ForegroundColor Red
+        Write-Host "[$Name] Installation failed: $($_.Exception.Message)"
         return $false
     }
 }
@@ -72,9 +73,10 @@ function Install-WithDownload {
 # ============================================================================
 # Install Azure CLI
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Azure CLI" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Azure CLI"
+Write-Host "========================================"
 
 Install-WithDownload `
     -Name "Azure CLI" `
@@ -85,9 +87,10 @@ Install-WithDownload `
 # ============================================================================
 # Install Visual Studio Code
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Visual Studio Code" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Visual Studio Code"
+Write-Host "========================================"
 
 Install-WithDownload `
     -Name "VS Code" `
@@ -98,35 +101,38 @@ Install-WithDownload `
 # ============================================================================
 # Install Git
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Git" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Git"
+Write-Host "========================================"
 
 Install-WithDownload `
     -Name "Git" `
     -Url "https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/Git-2.43.0-64-bit.exe" `
     -FileName "GitSetup.exe" `
-    -Arguments "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS=`"icons,ext\reg\shellhere,assoc,assoc_sh`""
+    -Arguments "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS"
 
 # ============================================================================
 # Install PowerShell 7
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing PowerShell 7" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing PowerShell 7"
+Write-Host "========================================"
 
 Install-WithDownload `
     -Name "PowerShell 7" `
     -Url "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi" `
     -FileName "PowerShell7.msi" `
-    -Arguments "/quiet /norestart ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1"
+    -Arguments "/quiet /norestart"
 
 # ============================================================================
 # Install Microsoft Edge (if not present)
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Microsoft Edge" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Microsoft Edge"
+Write-Host "========================================"
 
 $edgePath = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 if (-not (Test-Path $edgePath)) {
@@ -136,15 +142,16 @@ if (-not (Test-Path $edgePath)) {
         -FileName "MicrosoftEdge.msi" `
         -Arguments "/quiet /norestart"
 } else {
-    Write-Host "[Microsoft Edge] Already installed, skipping." -ForegroundColor Green
+    Write-Host "[Microsoft Edge] Already installed, skipping."
 }
 
 # ============================================================================
 # Install Google Chrome
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Google Chrome" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Google Chrome"
+Write-Host "========================================"
 
 $chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 if (-not (Test-Path $chromePath)) {
@@ -154,15 +161,16 @@ if (-not (Test-Path $chromePath)) {
         -FileName "GoogleChrome.msi" `
         -Arguments "/quiet /norestart"
 } else {
-    Write-Host "[Google Chrome] Already installed, skipping." -ForegroundColor Green
+    Write-Host "[Google Chrome] Already installed, skipping."
 }
 
 # ============================================================================
 # Install Python
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Installing Python" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing Python"
+Write-Host "========================================"
 
 Install-WithDownload `
     -Name "Python" `
@@ -173,9 +181,10 @@ Install-WithDownload `
 # ============================================================================
 # Create Desktop Shortcuts
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Creating Desktop Shortcuts" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Creating Desktop Shortcuts"
+Write-Host "========================================"
 
 try {
     $WshShell = New-Object -ComObject WScript.Shell
@@ -184,44 +193,36 @@ try {
     $shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\Azure AI Foundry.url")
     $shortcut.TargetPath = "https://ai.azure.com"
     $shortcut.Save()
-    Write-Host "[Shortcut] Created Azure AI Foundry shortcut" -ForegroundColor Green
+    Write-Host "[Shortcut] Created Azure AI Foundry shortcut"
     
     # Azure Portal shortcut
     $shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\Azure Portal.url")
     $shortcut.TargetPath = "https://portal.azure.com"
     $shortcut.Save()
-    Write-Host "[Shortcut] Created Azure Portal shortcut" -ForegroundColor Green
+    Write-Host "[Shortcut] Created Azure Portal shortcut"
     
 } catch {
-    Write-Host "[Shortcuts] Failed to create shortcuts: $_" -ForegroundColor Red
+    Write-Host "[Shortcuts] Failed to create shortcuts: $($_.Exception.Message)"
 }
-
-# ============================================================================
-# Refresh Environment Variables
-# ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Refreshing Environment Variables" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-Write-Host "Environment PATH refreshed." -ForegroundColor Green
 
 # ============================================================================
 # Cleanup
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Cleanup" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Cleanup"
+Write-Host "========================================"
 
 Remove-Item $tempDir -Recurse -Force -ErrorAction SilentlyContinue
-Write-Host "Temporary files cleaned up." -ForegroundColor Green
+Write-Host "Temporary files cleaned up."
 
 # ============================================================================
 # Summary
 # ============================================================================
-Write-Host "`n========================================" -ForegroundColor Green
-Write-Host "Installation Summary" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installation Summary"
+Write-Host "========================================"
 
 $installed = @()
 $notInstalled = @()
@@ -235,17 +236,27 @@ if (Test-Path "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") { 
 if (Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe") { $installed += "Google Chrome" } else { $notInstalled += "Google Chrome" }
 if (Test-Path "C:\Program Files\Python312\python.exe") { $installed += "Python" } else { $notInstalled += "Python" }
 
-Write-Host "`nInstalled:" -ForegroundColor Green
-$installed | ForEach-Object { Write-Host "  ✓ $_" -ForegroundColor Green }
-
-if ($notInstalled.Count -gt 0) {
-    Write-Host "`nNot Installed:" -ForegroundColor Yellow
-    $notInstalled | ForEach-Object { Write-Host "  ✗ $_" -ForegroundColor Yellow }
+Write-Host ""
+Write-Host "Installed:"
+foreach ($item in $installed) {
+    Write-Host "  [OK] $item"
 }
 
-Write-Host "`n========================================" -ForegroundColor Green
-Write-Host "Dev Tools Installation Complete!" -ForegroundColor Green
-Write-Host "Timestamp: $(Get-Date)" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
+if ($notInstalled.Count -gt 0) {
+    Write-Host ""
+    Write-Host "Not Installed:"
+    foreach ($item in $notInstalled) {
+        Write-Host "  [--] $item"
+    }
+}
+
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Dev Tools Installation Complete!"
+Write-Host "Timestamp: $(Get-Date)"
+Write-Host "========================================"
 
 Stop-Transcript
+
+# Always exit with success - installations are best effort
+exit 0
