@@ -47,6 +47,9 @@ param osDiskSizeGB int = 128
 @description('Enable auto-shutdown at specified time (UTC)')
 param enableAutoShutdown bool = true
 
+@description('URL to the PowerShell script for installing dev tools')
+param devToolsScriptUrl string = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/infra/scripts/Install-DevTools.ps1'
+
 @description('Auto-shutdown time in HHmm format (UTC)')
 param autoShutdownTime string = '1900'
 
@@ -150,8 +153,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
 }
 
 // ============================================================================
-// Custom Script Extension - Install Edge, VS Code, Azure CLI, etc.
-// Uses winget (pre-installed on Windows Server 2025)
+// Custom Script Extension - Install Dev Tools from external script
 // ============================================================================
 
 resource customScript 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = {
@@ -165,67 +167,12 @@ resource customScript 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' 
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
     settings: {
-      commandToExecute: '''
-        powershell -ExecutionPolicy Bypass -Command "
-          Start-Transcript -Path C:\\WindowsAzure\\Logs\\DevToolsInstall.log -Append;
-          
-          # Wait for winget to be available (Windows Server 2025 has it pre-installed)
-          $attempts = 0;
-          while (-not (Get-Command winget -ErrorAction SilentlyContinue) -and $attempts -lt 10) {
-            Write-Host 'Waiting for winget to be available...';
-            Start-Sleep -Seconds 30;
-            $attempts++;
-          }
-          
-          if (Get-Command winget -ErrorAction SilentlyContinue) {
-            Write-Host 'Installing applications with winget...';
-            
-            # Accept source agreements
-            winget source update;
-            
-            # Install Microsoft Edge
-            winget install -e --id Microsoft.Edge --accept-source-agreements --accept-package-agreements -h;
-            
-            # Install Google Chrome
-            winget install -e --id Google.Chrome --accept-source-agreements --accept-package-agreements -h;
-            
-            # Install VS Code
-            winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements -h;
-            
-            # Install Azure CLI
-            winget install -e --id Microsoft.AzureCLI --accept-source-agreements --accept-package-agreements -h;
-            
-            # Install Git
-            winget install -e --id Git.Git --accept-source-agreements --accept-package-agreements -h;
-            
-            # Install PowerShell 7
-            winget install -e --id Microsoft.PowerShell --accept-source-agreements --accept-package-agreements -h;
-            
-            Write-Host 'Winget installations completed.';
-          } else {
-            Write-Host 'Winget not available, falling back to direct downloads...';
-            
-            # Fallback: Install Azure CLI directly
-            $ProgressPreference = 'SilentlyContinue';
-            Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\\AzureCLI.msi;
-            Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet' -Wait;
-            Remove-Item .\\AzureCLI.msi -Force;
-            
-            # Fallback: Install VS Code directly
-            Invoke-WebRequest -Uri 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64' -OutFile .\\VSCodeSetup.exe;
-            Start-Process -FilePath .\\VSCodeSetup.exe -ArgumentList '/VERYSILENT /MERGETASKS=!runcode' -Wait;
-            Remove-Item .\\VSCodeSetup.exe -Force;
-          }
-          
-          # Create desktop shortcut for AI Foundry
-          $WshShell = New-Object -ComObject WScript.Shell;
-          $Shortcut = $WshShell.CreateShortcut('C:\\Users\\Public\\Desktop\\Azure AI Foundry.url');
-          $Shortcut.TargetPath = 'https://ai.azure.com';
-          $Shortcut.Save();
-          
-          Stop-Transcript;
-        "
-      '''
+      fileUris: [
+        devToolsScriptUrl
+      ]
+    }
+    protectedSettings: {
+      commandToExecute: 'powershell -ExecutionPolicy Bypass -File Install-DevTools.ps1'
     }
   }
 }
