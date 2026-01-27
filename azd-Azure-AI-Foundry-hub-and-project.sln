@@ -1,0 +1,70 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{FA8A28C8-4B59-8028-2ACF-626D05B08DB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AI-3002", "AI-3002", "{83FBF83B-8E8B-CBE5-3D26-48C725283ACD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main", "mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main", "{17BD5C4E-12F2-E435-8F52-1461DD844EB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Labfiles", "Labfiles", "{A846BB9D-1D9C-8A3B-AB0A-7BA95D8C4C2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "custom-doc-intelligence", "custom-doc-intelligence", "{5DD72CC4-712D-AFBB-C77F-3ED06162B1A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C-Sharp", "C-Sharp", "{150F5A68-6056-0470-B33D-53CD5F3E968A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-model", "Demos\AI-3002\mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main\Labfiles\custom-doc-intelligence\C-Sharp\test-model.csproj", "{8918F7A0-29DA-F669-302D-2C396317B770}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "knowledge", "knowledge", "{91A9AE2F-16A9-486D-FAE9-C7BDDD09E812}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-sharp", "c-sharp", "{56949286-8414-183F-D7EE-EFA5FF9018A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "search-app", "Demos\AI-3002\mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main\Labfiles\knowledge\c-sharp\search-app.csproj", "{03D57ED0-2711-40F3-CDED-4102F199DC83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prebuilt-doc-intelligence", "prebuilt-doc-intelligence", "{384509BA-B7B9-3F37-7A5C-484878831BBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-sharp", "c-sharp", "{0DD12FC8-9C73-2066-B55F-8E9C98EECFBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "documentanalysis", "Demos\AI-3002\mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main\Labfiles\prebuilt-doc-intelligence\c-sharp\documentanalysis.csproj", "{DFD6375F-0705-59C8-1978-37E0EA6B5D30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8918F7A0-29DA-F669-302D-2C396317B770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8918F7A0-29DA-F669-302D-2C396317B770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8918F7A0-29DA-F669-302D-2C396317B770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8918F7A0-29DA-F669-302D-2C396317B770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D57ED0-2711-40F3-CDED-4102F199DC83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D57ED0-2711-40F3-CDED-4102F199DC83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D57ED0-2711-40F3-CDED-4102F199DC83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D57ED0-2711-40F3-CDED-4102F199DC83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD6375F-0705-59C8-1978-37E0EA6B5D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD6375F-0705-59C8-1978-37E0EA6B5D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD6375F-0705-59C8-1978-37E0EA6B5D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD6375F-0705-59C8-1978-37E0EA6B5D30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83FBF83B-8E8B-CBE5-3D26-48C725283ACD} = {FA8A28C8-4B59-8028-2ACF-626D05B08DB7}
+		{17BD5C4E-12F2-E435-8F52-1461DD844EB6} = {83FBF83B-8E8B-CBE5-3D26-48C725283ACD}
+		{A846BB9D-1D9C-8A3B-AB0A-7BA95D8C4C2A} = {17BD5C4E-12F2-E435-8F52-1461DD844EB6}
+		{5DD72CC4-712D-AFBB-C77F-3ED06162B1A2} = {A846BB9D-1D9C-8A3B-AB0A-7BA95D8C4C2A}
+		{150F5A68-6056-0470-B33D-53CD5F3E968A} = {5DD72CC4-712D-AFBB-C77F-3ED06162B1A2}
+		{8918F7A0-29DA-F669-302D-2C396317B770} = {150F5A68-6056-0470-B33D-53CD5F3E968A}
+		{91A9AE2F-16A9-486D-FAE9-C7BDDD09E812} = {A846BB9D-1D9C-8A3B-AB0A-7BA95D8C4C2A}
+		{56949286-8414-183F-D7EE-EFA5FF9018A0} = {91A9AE2F-16A9-486D-FAE9-C7BDDD09E812}
+		{03D57ED0-2711-40F3-CDED-4102F199DC83} = {56949286-8414-183F-D7EE-EFA5FF9018A0}
+		{384509BA-B7B9-3F37-7A5C-484878831BBF} = {A846BB9D-1D9C-8A3B-AB0A-7BA95D8C4C2A}
+		{0DD12FC8-9C73-2066-B55F-8E9C98EECFBB} = {384509BA-B7B9-3F37-7A5C-484878831BBF}
+		{DFD6375F-0705-59C8-1978-37E0EA6B5D30} = {0DD12FC8-9C73-2066-B55F-8E9C98EECFBB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {882A128E-6D7B-4679-A88F-5A355A98780D}
+	EndGlobalSection
+EndGlobal

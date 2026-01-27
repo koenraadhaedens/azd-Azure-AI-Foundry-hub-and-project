@@ -1,4 +1,5 @@
 using Azure;
+using Azure.Identity;
 using System;
 using System.Threading.Tasks;
 using Azure.AI.FormRecognizer.DocumentAnalysis;
@@ -21,8 +22,9 @@ namespace document_analysis
                     .AddJsonFile("appsettings.json")
                     .Build();
                 string endpoint = configuration["DocIntelligenceEndpoint"];
-                string apiKey = configuration["DocIntelligenceKey"];
-                AzureKeyCredential credential = new AzureKeyCredential(apiKey);
+                
+                // Use managed identity with DefaultAzureCredential
+                var credential = new DefaultAzureCredential();
                 DocumentAnalysisClient client = new DocumentAnalysisClient(new Uri(endpoint), credential);
 
                 string modelId =  configuration["ModelId"];
