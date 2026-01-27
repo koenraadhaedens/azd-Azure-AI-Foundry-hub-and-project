@@ -267,6 +267,18 @@ module windowsVm 'modules/windowsVm.bicep' = {
 }
 
 // =====================================================
+// VM RBAC MODULE - Assign roles to jumpbox VM identity
+// =====================================================
+
+module vmRbac 'modules/vmRbac.bicep' = {
+  name: 'vm-rbac-deployment'
+  scope: rg
+  params: {
+    vmPrincipalId: windowsVm.outputs.vmPrincipalId
+  }
+}
+
+// =====================================================
 // OUTPUTS
 // =====================================================
 
