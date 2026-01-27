@@ -90,9 +90,7 @@ If you're planning to use **Content Understanding** or other preview AI features
 
 | Region | Location Code |
 |--------|---------------|
-| East US | `eastus` |
-| West US 2 | `westus2` |
-| West Europe | `westeurope` |
+
 | Sweden Central | `swedencentral` |
 
 ## 🚀 Quick Start
