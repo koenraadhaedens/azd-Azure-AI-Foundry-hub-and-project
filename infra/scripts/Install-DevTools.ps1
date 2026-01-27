@@ -206,6 +206,69 @@ try {
 }
 
 # ============================================================================
+# Download and Extract Lab Files
+# ============================================================================
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Downloading Lab Files"
+Write-Host "========================================"
+
+try {
+    $labFilesUrl = "https://github.com/koenraadhaedens/azd-Azure-AI-Foundry-hub-and-project/archive/refs/heads/main.zip"
+    $labFilesZip = Join-Path $tempDir "labfiles.zip"
+    $labFilesDestination = "C:\LabFiles"
+    
+    Write-Host "[Lab Files] Downloading from: $labFilesUrl"
+    Invoke-WebRequest -Uri $labFilesUrl -OutFile $labFilesZip -UseBasicParsing -ErrorAction Stop
+    
+    if (Test-Path $labFilesZip) {
+        $fileSize = [math]::Round((Get-Item $labFilesZip).Length / 1MB, 2)
+        Write-Host "[Lab Files] Download complete. File size: $fileSize MB"
+        
+        # Create destination folder
+        if (-not (Test-Path $labFilesDestination)) {
+            New-Item -ItemType Directory -Path $labFilesDestination -Force | Out-Null
+        }
+        
+        # Extract zip file
+        Write-Host "[Lab Files] Extracting to: $labFilesDestination"
+        Expand-Archive -Path $labFilesZip -DestinationPath $labFilesDestination -Force
+        
+        # Move contents from nested folder to root (GitHub adds repo-branch folder)
+        $nestedFolder = Get-ChildItem -Path $labFilesDestination -Directory | Select-Object -First 1
+        if ($nestedFolder) {
+            Get-ChildItem -Path $nestedFolder.FullName | Move-Item -Destination $labFilesDestination -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path $nestedFolder.FullName -Recurse -Force -ErrorAction SilentlyContinue
+        }
+        
+        Write-Host "[Lab Files] Extraction complete."
+        
+        # Create VS Code shortcut to open Lab Files folder
+        Write-Host "[Lab Files] Creating VS Code shortcut on desktop..."
+        $vsCodePath = "C:\Program Files\Microsoft VS Code\Code.exe"
+        if (Test-Path $vsCodePath) {
+            $WshShell = New-Object -ComObject WScript.Shell
+            $shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\Lab Files (VS Code).lnk")
+            $shortcut.TargetPath = $vsCodePath
+            $shortcut.Arguments = "`"$labFilesDestination`""
+            $shortcut.WorkingDirectory = $labFilesDestination
+            $shortcut.Description = "Open Lab Files in VS Code"
+            $shortcut.IconLocation = "$vsCodePath,0"
+            $shortcut.Save()
+            Write-Host "[Lab Files] VS Code shortcut created on desktop."
+        } else {
+            Write-Host "[Lab Files] VS Code not found, skipping shortcut creation."
+        }
+        
+        Remove-Item $labFilesZip -Force -ErrorAction SilentlyContinue
+    } else {
+        Write-Host "[Lab Files] Download failed - file not found."
+    }
+} catch {
+    Write-Host "[Lab Files] Failed to download/extract lab files: $($_.Exception.Message)"
+}
+
+# ============================================================================
 # Cleanup
 # ============================================================================
 Write-Host ""
@@ -235,6 +298,7 @@ if (Test-Path "C:\Program Files\PowerShell\7\pwsh.exe") { $installed += "PowerSh
 if (Test-Path "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") { $installed += "Microsoft Edge" } else { $notInstalled += "Microsoft Edge" }
 if (Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe") { $installed += "Google Chrome" } else { $notInstalled += "Google Chrome" }
 if (Test-Path "C:\Program Files\Python312\python.exe") { $installed += "Python" } else { $notInstalled += "Python" }
+if (Test-Path "C:\LabFiles") { $installed += "Lab Files" } else { $notInstalled += "Lab Files" }
 
 Write-Host ""
 Write-Host "Installed:"
