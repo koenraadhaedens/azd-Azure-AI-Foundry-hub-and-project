@@ -199,18 +199,8 @@ var amlDataScientistRole = resourceId('Microsoft.Authorization/roleDefinitions',
 var aiDeveloperRole = resourceId('Microsoft.Authorization/roleDefinitions', '64702f94-c441-49e6-a78b-ef80e0188fee')
 
 resource hubDataScientistRoles 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(aiHub.id, principalId, amlDataScientistRole)
-  scope: aiHub
-  properties: {
-    principalId: principalId
-    roleDefinitionId: amlDataScientistRole
-    principalType: 'User'
-  }
-}]
-
-resource projectDataScientistRoles 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(aiProject.id, principalId, amlDataScientistRole)
-  scope: aiProject
+  name: guid(resourceGroup().id, principalId, amlDataScientistRole)
+  scope: resourceGroup()
   properties: {
     principalId: principalId
     roleDefinitionId: amlDataScientistRole
@@ -219,18 +209,8 @@ resource projectDataScientistRoles 'Microsoft.Authorization/roleAssignments@2022
 }]
 
 resource hubAiDeveloperRoles 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(aiHub.id, principalId, aiDeveloperRole)
-  scope: aiHub
-  properties: {
-    principalId: principalId
-    roleDefinitionId: aiDeveloperRole
-    principalType: 'User'
-  }
-}]
-
-resource projectAiDeveloperRoles 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(aiProject.id, principalId, aiDeveloperRole)
-  scope: aiProject
+  name: guid(resourceGroup().id, principalId, aiDeveloperRole)
+  scope: resourceGroup()
   properties: {
     principalId: principalId
     roleDefinitionId: aiDeveloperRole

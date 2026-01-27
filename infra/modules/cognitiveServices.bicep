@@ -129,8 +129,8 @@ var cognitiveServicesUserRole = resourceId('Microsoft.Authorization/roleDefiniti
 var cognitiveServicesContributorRole = resourceId('Microsoft.Authorization/roleDefinitions', '25fbc0a9-bd7c-42a3-aa1a-3b75d497ee68')
 
 resource userRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(cognitiveServices.id, principalId, cognitiveServicesUserRole)
-  scope: cognitiveServices
+  name: guid(resourceGroup().id, principalId, cognitiveServicesUserRole)
+  scope: resourceGroup()
   properties: {
     principalId: principalId
     roleDefinitionId: cognitiveServicesUserRole
@@ -139,8 +139,8 @@ resource userRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01
 }]
 
 resource contributorRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for principalId in aadObjectIdForOwners: {
-  name: guid(cognitiveServices.id, principalId, cognitiveServicesContributorRole)
-  scope: cognitiveServices
+  name: guid(resourceGroup().id, principalId, cognitiveServicesContributorRole)
+  scope: resourceGroup()
   properties: {
     principalId: principalId
     roleDefinitionId: cognitiveServicesContributorRole
