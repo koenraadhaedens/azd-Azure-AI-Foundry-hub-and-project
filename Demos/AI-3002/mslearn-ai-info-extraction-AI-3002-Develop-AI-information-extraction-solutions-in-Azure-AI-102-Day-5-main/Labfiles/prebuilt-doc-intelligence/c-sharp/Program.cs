@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Identity;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,9 @@ namespace document_analysis
                 IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
                 IConfigurationRoot configuration = builder.Build();
                 string endpoint = configuration["ENDPOINT"];
-                string key = configuration["KEY"];
+
+                // Use managed identity for authentication
+                var credential = new DefaultAzureCredential();
 
                 // Set analysis settings
                 Uri fileUri = new Uri("https://github.com/MicrosoftLearning/mslearn-ai-information-extraction/blob/main/Labfiles/prebuilt-doc-intelligence/sample-invoice/sample-invoice.pdf?raw=true");
