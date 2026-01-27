@@ -211,6 +211,29 @@ azd down --force --purge
 - Check regional quotas for: vCPUs, Public IPs, Bastion hosts
 - Try a different region or request quota increase
 
+### "Preview API is not supported in this region"
+This error occurs when using the **Content Understanding API (preview)** with an Azure AI Services resource deployed in an unsupported region.
+
+**Supported Regions for Content Understanding (Preview):**
+| Region | Location Code |
+|--------|---------------|
+| East US | `eastus` |
+| West US 2 | `westus2` |
+| West Europe | `westeurope` |
+| Sweden Central | `swedencentral` |
+
+**Solution:** Redeploy your Azure AI Services resource to one of the supported regions:
+
+```bash
+# Set location to a supported region
+azd env set AZURE_LOCATION "eastus"
+
+# Redeploy
+azd up
+```
+
+> ⚠️ **Important:** If you're planning to use Content Understanding or other preview AI features, verify region availability in the [Azure AI Services documentation](https://learn.microsoft.com/azure/ai-services/content-understanding/) before deployment.
+
 ## 📚 Resources
 
 - [Azure AI Foundry Documentation](https://learn.microsoft.com/azure/ai-studio/)
