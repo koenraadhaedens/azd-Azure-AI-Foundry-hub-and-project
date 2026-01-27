@@ -82,16 +82,8 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01' = {
     publicNetworkAccess: 'Disabled' // CRITICAL: No public access
     managedNetwork: {
       isolationMode: 'AllowInternetOutbound'
-      outboundRules: !empty(cognitiveServicesId) ? {
-        'aiservices-pe': {
-          type: 'PrivateEndpoint'
-          destination: {
-            serviceResourceId: cognitiveServicesId
-            subresourceTarget: 'account'
-            sparkEnabled: false
-          }
-        }
-      } : {}
+      // Note: AI Services connection is established via the connection resource,
+      // not via managed network outbound rules. This avoids long provisioning loops.
     }
     // Disable v1 legacy API
     v1LegacyMode: false
