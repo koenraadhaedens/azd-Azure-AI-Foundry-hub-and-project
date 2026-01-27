@@ -1,9 +1,13 @@
 // ============================================================================
 // VM RBAC Module - Role assignments for jumpbox VM managed identity
+// and deploying user
 // ============================================================================
 
 @description('Principal ID of the VM managed identity')
 param vmPrincipalId string
+
+@description('Principal ID of the user running the deployment (optional)')
+param deployingUserPrincipalId string = ''
 
 // ============================================================================
 // Role Definitions
@@ -94,5 +98,72 @@ resource vmReaderRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     principalId: vmPrincipalId
     roleDefinitionId: readerRole
     principalType: 'ServicePrincipal'
+  }
+}
+
+// ============================================================================
+// Role Assignments for Deploying User at Resource Group Scope
+// ============================================================================
+
+resource userCognitiveServicesUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, cognitiveServicesUserRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: cognitiveServicesUserRole
+    principalType: 'User'
+  }
+}
+
+resource userCognitiveServicesContributorRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, cognitiveServicesContributorRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: cognitiveServicesContributorRole
+    principalType: 'User'
+  }
+}
+
+resource userAmlDataScientistRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, amlDataScientistRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: amlDataScientistRole
+    principalType: 'User'
+  }
+}
+
+resource userAiDeveloperRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, aiDeveloperRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: aiDeveloperRole
+    principalType: 'User'
+  }
+}
+
+resource userStorageBlobDataContributorRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, storageBlobDataContributorRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: storageBlobDataContributorRole
+    principalType: 'User'
+  }
+}
+
+resource userKeyVaultSecretsUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, keyVaultSecretsUserRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: keyVaultSecretsUserRole
+    principalType: 'User'
+  }
+}
+
+resource userReaderRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
+  name: guid(resourceGroup().id, deployingUserPrincipalId, readerRole)
+  properties: {
+    principalId: deployingUserPrincipalId
+    roleDefinitionId: readerRole
+    principalType: 'User'
   }
 }

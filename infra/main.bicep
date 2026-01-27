@@ -48,6 +48,9 @@ param vmAdminPassword string
 @description('Array of Microsoft Entra ID Object IDs to grant RBAC roles (Key Vault, Storage, ACR, AI Hub)')
 param aadObjectIdForOwners array = []
 
+@description('Principal ID of the user running the deployment for RBAC assignments')
+param principalId string = ''
+
 @description('VM Size for the Windows jumpbox')
 param vmSize string = 'Standard_D2s_v6'
 
@@ -275,6 +278,7 @@ module vmRbac 'modules/vmRbac.bicep' = {
   scope: rg
   params: {
     vmPrincipalId: windowsVm.outputs.vmPrincipalId
+    deployingUserPrincipalId: principalId
   }
 }
 
