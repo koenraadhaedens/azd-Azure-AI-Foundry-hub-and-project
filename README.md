@@ -92,6 +92,7 @@ If you're planning to use **Content Understanding** or other preview AI features
 |--------|---------------|
 
 | Sweden Central | `swedencentral` |
+| East Us 2 | `eastus2` |
 
 ## 🚀 Quick Start
 
