@@ -66,6 +66,19 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 - [Bicep CLI](https://docs.microsoft.com/azure/azure-resource-manager/bicep/install) (v0.20+)
 - Azure subscription with Owner or Contributor + User Access Administrator roles
 
+> 💡 **Using Azure Cloud Shell?** Azure CLI and Azure Developer CLI are already pre-installed - no additional setup required!
+
+### Supported Regions
+
+If you're planning to use **Content Understanding** or other preview AI features, deploy to one of these supported regions:
+
+| Region | Location Code |
+|--------|---------------|
+| East US | `eastus` |
+| West US 2 | `westus2` |
+| West Europe | `westeurope` |
+| Sweden Central | `swedencentral` |
+
 ## 🚀 Quick Start
 
 ### 1. Clone and Initialize
@@ -78,28 +91,26 @@ cd azd-Azure-AI-Foundry-hub-and-project
 azd init -e dev
 ```
 
-### 2. Configure Environment Variables
-
-```bash
-# Set required variables
-azd env set AZURE_LOCATION "eastus2"
-azd env set VM_ADMIN_PASSWORD "YourSecurePassword123!"
-
-# Optional: Grant RBAC to specific users (comma-separated object IDs)
-azd env set AAD_OBJECT_ID_FOR_OWNERS "<your-aad-object-id>"
-```
-
-### 3. Deploy
+### 2. Deploy
 
 ```bash
 # Login to Azure
 azd auth login
 
-# Deploy everything
+# Deploy everything (you will be prompted for location and VM password)
 azd up
 ```
 
-### 4. Access AI Foundry Portal
+> 📝 **Note:** During deployment, you will be prompted to:
+> - Select the Azure location (use a supported region from the table above)
+> - Enter the VM admin password (must meet Azure password complexity requirements)
+>
+> **Optional:** To grant RBAC to specific users, set their AAD Object IDs before deployment:
+> ```bash
+> azd env set AAD_OBJECT_ID_FOR_OWNERS "<object-id-1>,<object-id-2>"
+> ```
+
+### 3. Access AI Foundry Portal
 
 Since all resources are private, you must access AI Foundry through the jumpbox VM:
 
