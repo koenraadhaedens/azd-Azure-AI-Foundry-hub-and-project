@@ -17,6 +17,12 @@ param subnetId string
 @description('Private DNS Zone ID for Cognitive Services')
 param privateDnsZoneId string
 
+@description('Private DNS Zone ID for OpenAI')
+param privateDnsZoneOpenAiId string = ''
+
+@description('Private DNS Zone ID for AI Services')
+param privateDnsZoneAiServicesId string = ''
+
 @description('Kind of Cognitive Services account')
 @allowed([
   'AIServices' // Azure AI Services (multi-service, required for AI Foundry)
@@ -86,14 +92,32 @@ resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
   parent: privateEndpoint
   name: 'cognitive-dns-group'
   properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: 'cognitive-config'
-        properties: {
-          privateDnsZoneId: privateDnsZoneId
+    privateDnsZoneConfigs: union(
+      [
+        {
+          name: 'cognitive-config'
+          properties: {
+            privateDnsZoneId: privateDnsZoneId
+          }
         }
-      }
-    ]
+      ],
+      !empty(privateDnsZoneOpenAiId) ? [
+        {
+          name: 'openai-config'
+          properties: {
+            privateDnsZoneId: privateDnsZoneOpenAiId
+          }
+        }
+      ] : [],
+      !empty(privateDnsZoneAiServicesId) ? [
+        {
+          name: 'aiservices-config'
+          properties: {
+            privateDnsZoneId: privateDnsZoneAiServicesId
+          }
+        }
+      ] : []
+    )
   }
 }
 

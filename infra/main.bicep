@@ -217,6 +217,8 @@ module cognitiveServices 'modules/cognitiveServices.bicep' = if (enableAIService
     cognitiveServicesName: cognitiveServicesName
     subnetId: network.outputs.workloadSubnetId
     privateDnsZoneId: privateDns.outputs.privateDnsZoneCognitiveServicesId
+    privateDnsZoneOpenAiId: privateDns.outputs.privateDnsZoneOpenAiId
+    privateDnsZoneAiServicesId: privateDns.outputs.privateDnsZoneAiServicesId
     aadObjectIdForOwners: aadObjectIdForOwners
   }
 }

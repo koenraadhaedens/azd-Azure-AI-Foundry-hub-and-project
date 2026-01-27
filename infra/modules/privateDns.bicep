@@ -28,9 +28,10 @@ var privateDnsZones = [
   'privatelink.vaultcore.azure.net'
   // Container Registry
   'privatelink.azurecr.io'
-  // Cognitive Services / Azure OpenAI
+  // Cognitive Services / Azure OpenAI / Azure AI Services
   'privatelink.cognitiveservices.azure.com'
   'privatelink.openai.azure.com'
+  'privatelink.services.ai.azure.com'  // Required for AI Foundry services
   // Azure Machine Learning / AI Foundry
   'privatelink.api.azureml.ms'
   'privatelink.notebooks.azure.net'
@@ -76,5 +77,6 @@ output privateDnsZoneKeyVaultId string = dnsZones[4].id
 output privateDnsZoneAcrId string = dnsZones[5].id
 output privateDnsZoneCognitiveServicesId string = dnsZones[6].id
 output privateDnsZoneOpenAiId string = dnsZones[7].id
-output privateDnsZoneAmlApiId string = dnsZones[8].id
-output privateDnsZoneAmlNotebooksId string = dnsZones[9].id
+output privateDnsZoneAiServicesId string = dnsZones[8].id
+output privateDnsZoneAmlApiId string = dnsZones[9].id
+output privateDnsZoneAmlNotebooksId string = dnsZones[10].id
