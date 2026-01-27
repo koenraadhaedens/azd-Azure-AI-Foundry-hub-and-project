@@ -36,6 +36,9 @@ param enableNatGateway bool = false
 @description('Deploy Azure AI Services (required for Content Understanding, Document Intelligence, etc.)')
 param enableAIServices bool = true
 
+@description('Deploy Azure AI Document Intelligence resource')
+param enableDocumentIntelligence bool = true
+
 @description('Admin username for the Windows VM')
 param vmAdminUsername string = 'azureadmin'
 
@@ -87,6 +90,7 @@ var appInsightsName = '${abbrs.insightsComponents}${namePrefix}-${resourceToken}
 var aiHubName = '${abbrs.machineLearningServicesWorkspaces}hub-${namePrefix}-${resourceToken}'
 var aiProjectName = '${abbrs.machineLearningServicesWorkspaces}proj-${namePrefix}-${resourceToken}'
 var cognitiveServicesName = '${abbrs.cognitiveServicesAccounts}${namePrefix}-${resourceToken}'
+var documentIntelligenceName = '${abbrs.cognitiveServicesAccounts}docint-${namePrefix}-${resourceToken}'
 var vmName = '${abbrs.computeVirtualMachines}${namePrefix}-jump'
 
 // =====================================================
@@ -229,6 +233,23 @@ module cognitiveServices 'modules/cognitiveServices.bicep' = if (enableAIService
 }
 
 // =====================================================
+// AZURE AI DOCUMENT INTELLIGENCE MODULE
+// =====================================================
+
+module documentIntelligence 'modules/documentIntelligence.bicep' = if (enableDocumentIntelligence) {
+  name: 'document-intelligence-deployment'
+  scope: rg
+  params: {
+    location: location
+    tags: tags
+    documentIntelligenceName: documentIntelligenceName
+    subnetId: network.outputs.workloadSubnetId
+    privateDnsZoneId: privateDns.outputs.privateDnsZoneCognitiveServicesId
+    aadObjectIdForOwners: aadObjectIdForOwners
+  }
+}
+
+// =====================================================
 // AI FOUNDRY (HUB + PROJECT) MODULE
 // =====================================================
 
@@ -330,3 +351,8 @@ output AI_PROJECT_ID string = aiFoundry.outputs.aiProjectId
 // Azure AI Services (if enabled)
 output COGNITIVE_SERVICES_NAME string = enableAIServices ? cognitiveServices.outputs.cognitiveServicesName : ''
 output COGNITIVE_SERVICES_ENDPOINT string = enableAIServices ? cognitiveServices.outputs.cognitiveServicesEndpoint : ''
+
+// Azure AI Document Intelligence (if enabled)
+output DOCUMENT_INTELLIGENCE_NAME string = documentIntelligence.?outputs.?documentIntelligenceName ?? ''
+output DOCUMENT_INTELLIGENCE_ENDPOINT string = documentIntelligence.?outputs.?documentIntelligenceEndpoint ?? ''
+output DOCUMENT_INTELLIGENCE_PRINCIPAL_ID string = documentIntelligence.?outputs.?documentIntelligencePrincipalId ?? ''
