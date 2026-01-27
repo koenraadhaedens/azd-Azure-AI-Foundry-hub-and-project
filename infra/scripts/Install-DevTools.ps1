@@ -25,6 +25,82 @@ if (-not (Test-Path $tempDir)) {
 Set-Location $tempDir
 
 # ============================================================================
+# Disable Server Manager from starting on login
+# ============================================================================
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Disabling Server Manager Auto-Start"
+Write-Host "========================================"
+
+try {
+    # Disable via Registry for all users
+    $regPath = "HKLM:\SOFTWARE\Microsoft\ServerManager"
+    if (-not (Test-Path $regPath)) {
+        New-Item -Path $regPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $regPath -Name "DoNotOpenServerManagerAtLogon" -Value 1 -Type DWord
+    Write-Host "[Server Manager] Disabled auto-start via registry."
+    
+    # Also disable the scheduled task if it exists
+    $task = Get-ScheduledTask -TaskName "ServerManager" -ErrorAction SilentlyContinue
+    if ($task) {
+        Disable-ScheduledTask -TaskName "ServerManager" -ErrorAction SilentlyContinue
+        Write-Host "[Server Manager] Disabled scheduled task."
+    }
+} catch {
+    Write-Host "[Server Manager] Failed to disable: $($_.Exception.Message)"
+}
+
+# ============================================================================
+# Configure Microsoft Edge - Skip First Run Experience
+# ============================================================================
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Configuring Microsoft Edge (Skip First Run)"
+Write-Host "========================================"
+
+try {
+    # Create Edge policy registry keys
+    $edgePolicyPath = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
+    if (-not (Test-Path $edgePolicyPath)) {
+        New-Item -Path $edgePolicyPath -Force | Out-Null
+    }
+    
+    # Hide First Run Experience
+    Set-ItemProperty -Path $edgePolicyPath -Name "HideFirstRunExperience" -Value 1 -Type DWord
+    Write-Host "[Edge] Disabled first run experience."
+    
+    # Disable sync prompt
+    Set-ItemProperty -Path $edgePolicyPath -Name "SyncDisabled" -Value 1 -Type DWord
+    Write-Host "[Edge] Disabled sync."
+    
+    # Disable sign-in prompt
+    Set-ItemProperty -Path $edgePolicyPath -Name "BrowserSignin" -Value 0 -Type DWord
+    Write-Host "[Edge] Disabled browser sign-in prompt."
+    
+    # Disable import prompt on first run
+    Set-ItemProperty -Path $edgePolicyPath -Name "ImportOnEachLaunch" -Value 0 -Type DWord
+    Set-ItemProperty -Path $edgePolicyPath -Name "AutoImportAtFirstRun" -Value 4 -Type DWord
+    Write-Host "[Edge] Disabled auto-import prompts."
+    
+    # Disable default browser prompt
+    Set-ItemProperty -Path $edgePolicyPath -Name "DefaultBrowserSettingEnabled" -Value 0 -Type DWord
+    Write-Host "[Edge] Disabled default browser prompt."
+    
+    # Disable personalization prompt
+    Set-ItemProperty -Path $edgePolicyPath -Name "PersonalizationReportingEnabled" -Value 0 -Type DWord
+    Write-Host "[Edge] Disabled personalization reporting."
+    
+    # Set a clean startup page (optional - opens new tab page)
+    Set-ItemProperty -Path $edgePolicyPath -Name "RestoreOnStartup" -Value 5 -Type DWord
+    Write-Host "[Edge] Configured clean startup."
+    
+    Write-Host "[Edge] First run configuration complete."
+} catch {
+    Write-Host "[Edge] Failed to configure: $($_.Exception.Message)"
+}
+
+# ============================================================================
 # Function: Install via direct download
 # ============================================================================
 function Install-WithDownload {

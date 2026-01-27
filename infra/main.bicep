@@ -64,6 +64,8 @@ var tags = {
   'azd-env-name': environmentName
   Environment: 'Dev'
   Project: 'Azure-AI-Foundry-Private'
+  SecurityControl: 'Ignore'
+  CostControl: 'Ignore'
 }
 
 // Resource names
