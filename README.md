@@ -59,7 +59,23 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 | **AI Foundry Hub/Project** | `publicNetworkAccess: Disabled`, System-assigned managed identity |
 | **Windows VM** | No public IP, accessible only via Azure Bastion |
 
-## 📋 Prerequisites
+## � RBAC Role Assignments
+
+The following roles are automatically assigned on the resource group to both the **VM's managed identity** and the **deploying user**:
+
+| Role | Description |
+|------|-------------|
+| **Cognitive Services User** | Read access to Cognitive Services endpoints |
+| **Cognitive Services Contributor** | Manage Cognitive Services resources |
+| **Azure ML Data Scientist** | Work with Azure Machine Learning workspaces |
+| **Azure AI Developer** | Develop AI applications |
+| **Storage Blob Data Contributor** | Read, write, and delete blob data |
+| **Key Vault Secrets User** | Read secrets from Key Vault |
+| **Reader** | Read access to all resources in the resource group |
+
+> 💡 These roles enable both the jumpbox VM (via its system-assigned managed identity) and the user running the deployment to interact with all AI Foundry resources without requiring keys or connection strings.
+
+## �📋 Prerequisites
 
 - [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) (v2.50+)
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) (v1.5+)
