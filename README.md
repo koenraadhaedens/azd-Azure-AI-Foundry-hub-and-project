@@ -106,7 +106,7 @@ If you're planning to use **Content Understanding** or other preview AI features
 |--------|---------------|
 
 | Sweden Central | `swedencentral` |
-
+| West us | `westus` |
 
 ## 🚀 Quick Start
 
