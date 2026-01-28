@@ -1,6 +1,11 @@
 # Azure AI Foundry - Private Networking Infrastructure
 
+This repository provides a **production-ready, fully private** Azure AI Foundry deployment using Azure Developer CLI (azd) and Bicep. All resources are deployed with **no public endpoints** and **Microsoft Entra ID (AAD) authentication only**.
+
+---
 > 🐛 **Found an issue?** Please [open an issue](../../issues) and tag [@koenraadhaedens](https://github.com/koenraadhaedens) and [@uweinside](https://github.com/uweinside) - we'll look into it!
+
+---
 
 ## 👥 Co-Authors
 
@@ -9,7 +14,7 @@
 
 ---
 
-This repository provides a **production-ready, fully private** Azure AI Foundry deployment using Azure Developer CLI (azd) and Bicep. All resources are deployed with **no public endpoints** and **Microsoft Entra ID (AAD) authentication only**.
+
 
 ## 🏗️ Architecture
 
