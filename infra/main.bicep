@@ -39,6 +39,9 @@ param enableAIServices bool = true
 @description('Deploy Azure AI Document Intelligence resource')
 param enableDocumentIntelligence bool = true
 
+@description('Deploy Azure AI Language resource')
+param enableAILanguage bool = true
+
 @description('Admin username for the Windows VM')
 param vmAdminUsername string = 'azureadmin'
 
@@ -91,6 +94,7 @@ var aiHubName = '${abbrs.machineLearningServicesWorkspaces}hub-${namePrefix}-${r
 var aiProjectName = '${abbrs.machineLearningServicesWorkspaces}proj-${namePrefix}-${resourceToken}'
 var cognitiveServicesName = '${abbrs.cognitiveServicesAccounts}${namePrefix}-${resourceToken}'
 var documentIntelligenceName = '${abbrs.cognitiveServicesAccounts}docint-${namePrefix}-${resourceToken}'
+var aiLanguageName = '${abbrs.cognitiveServicesAccounts}lang-${namePrefix}-${resourceToken}'
 var vmName = '${abbrs.computeVirtualMachines}${namePrefix}-jump'
 
 // =====================================================
@@ -250,6 +254,23 @@ module documentIntelligence 'modules/documentIntelligence.bicep' = if (enableDoc
 }
 
 // =====================================================
+// AZURE AI LANGUAGE MODULE
+// =====================================================
+
+module aiLanguage 'modules/aiLanguage.bicep' = if (enableAILanguage) {
+  name: 'ai-language-deployment'
+  scope: rg
+  params: {
+    location: location
+    tags: tags
+    aiLanguageName: aiLanguageName
+    subnetId: network.outputs.workloadSubnetId
+    privateDnsZoneId: privateDns.outputs.privateDnsZoneCognitiveServicesId
+    aadObjectIdForOwners: aadObjectIdForOwners
+  }
+}
+
+// =====================================================
 // AI FOUNDRY (HUB + PROJECT) MODULE
 // =====================================================
 
@@ -356,3 +377,8 @@ output COGNITIVE_SERVICES_ENDPOINT string = enableAIServices ? cognitiveServices
 output DOCUMENT_INTELLIGENCE_NAME string = documentIntelligence.?outputs.?documentIntelligenceName ?? ''
 output DOCUMENT_INTELLIGENCE_ENDPOINT string = documentIntelligence.?outputs.?documentIntelligenceEndpoint ?? ''
 output DOCUMENT_INTELLIGENCE_PRINCIPAL_ID string = documentIntelligence.?outputs.?documentIntelligencePrincipalId ?? ''
+
+// Azure AI Language (if enabled)
+output AI_LANGUAGE_NAME string = aiLanguage.?outputs.?aiLanguageName ?? ''
+output AI_LANGUAGE_ENDPOINT string = aiLanguage.?outputs.?aiLanguageEndpoint ?? ''
+output AI_LANGUAGE_PRINCIPAL_ID string = aiLanguage.?outputs.?aiLanguagePrincipalId ?? ''
