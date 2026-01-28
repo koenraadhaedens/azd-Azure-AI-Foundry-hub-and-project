@@ -1,0 +1,21 @@
+remote_theme: MicrosoftLearning/Jekyll-Theme
+exclude:
+  - readme.md
+  - .github/
+header_pages:
+  - index.html
+author: Microsoft Learning
+twitter_username: mslearning
+github_username:  MicrosoftLearning
+plugins:
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jemoji
+title: Azure AI Language Exercises
+markdown: GFM
+
+#markdown: kramdown
+#kramdown:
+#  syntax_highlighter_opts:
+#     disable : true
+
