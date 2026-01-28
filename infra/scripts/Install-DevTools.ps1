@@ -255,6 +255,20 @@ Install-WithDownload `
     -Arguments "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0"
 
 # ============================================================================
+# Install .NET SDK
+# ============================================================================
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing .NET SDK"
+Write-Host "========================================"
+
+Install-WithDownload `
+    -Name ".NET SDK 8.0" `
+    -Url "https://download.visualstudio.microsoft.com/download/pr/93961dfb-d1e0-49c8-9230-abcba1ebab5a/811ed1eb63d7652325727720edda26a8/dotnet-sdk-8.0.101-win-x64.exe" `
+    -FileName "DotNetSdkSetup.exe" `
+    -Arguments "/quiet /norestart"
+
+# ============================================================================
 # Create Desktop Shortcuts
 # ============================================================================
 Write-Host ""
@@ -374,6 +388,7 @@ if (Test-Path "C:\Program Files\PowerShell\7\pwsh.exe") { $installed += "PowerSh
 if (Test-Path "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") { $installed += "Microsoft Edge" } else { $notInstalled += "Microsoft Edge" }
 if (Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe") { $installed += "Google Chrome" } else { $notInstalled += "Google Chrome" }
 if (Test-Path "C:\Program Files\Python312\python.exe") { $installed += "Python" } else { $notInstalled += "Python" }
+if (Test-Path "C:\Program Files\dotnet\dotnet.exe") { $installed += ".NET SDK" } else { $notInstalled += ".NET SDK" }
 if (Test-Path "C:\LabFiles") { $installed += "Lab Files" } else { $notInstalled += "Lab Files" }
 
 Write-Host ""
