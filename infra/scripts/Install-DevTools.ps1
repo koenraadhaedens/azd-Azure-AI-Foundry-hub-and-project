@@ -263,37 +263,7 @@ Write-Host "Installing .NET SDK"
 Write-Host "========================================"
 
 try {
-    Write-Host "[.NET SDK 8.0] Downloading installer script..."
-    
-    # Ensure TLS 1.2 (some environments default lower)
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    
-    # Download the installer script from the stable endpoint
-    $dl = "$env:TEMP\dotnet-install.ps1"
-    Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -OutFile $dl -UseBasicParsing
-    
-    Write-Host "[.NET SDK 8.0] Installing SDK version 8.0.101..."
-    
-    # Install specific SDK version (machine dir). Requires admin.
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $dl -Version 8.0.101 -InstallDir "C:\Program Files\dotnet" -Quality GA
-    
-    Write-Host "[.NET SDK 8.0] Updating PATH environment variable..."
-    
-    # Make sure PATH includes the machine-wide dotnet
-    $machineDotnet = "C:\Program Files\dotnet"
-    $inPath = [Environment]::GetEnvironmentVariable("Path","Machine") -split ";" | Where-Object { $_ -eq $machineDotnet }
-    if (-not $inPath) {
-        $newPath = ([Environment]::GetEnvironmentVariable("Path","Machine") + ";$machineDotnet").Trim(';')
-        [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
-        Write-Host "[.NET SDK 8.0] PATH updated successfully."
-    } else {
-        Write-Host "[.NET SDK 8.0] PATH already contains dotnet directory."
-    }
-    
-    # Clean up installer script
-    Remove-Item $dl -Force -ErrorAction SilentlyContinue
-    
-    Write-Host "[.NET SDK 8.0] Installation completed successfully."
+    winget install --id Microsoft.DotNet.SDK.8 --exact --scope machine --silent --disable-interactivity --accept-package-agreements --accept-source-agreements
 } catch {
     Write-Host "[.NET SDK 8.0] Installation failed: $($_.Exception.Message)"
 }
