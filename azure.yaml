@@ -27,6 +27,6 @@ hooks:
       shell: sh
       run: |
         chmod +x ./infra/scripts/postprovision.sh || echo "chmod failed, running anyway..."
-        ./scripts/postprovision.sh
+        ./infra/scripts/postprovision.sh
       interactive: true
       continueOnError: false
