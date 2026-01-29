@@ -60,6 +60,9 @@ param principalId string = ''
 @description('VM Size for the Windows jumpbox')
 param vmSize string = 'Standard_D2s_v6'
 
+@description('URL to the PowerShell script for installing dev tools on the VM')
+param devToolsScriptUrl string = 'https://raw.githubusercontent.com/koenraadhaedens/azd-Azure-AI-Foundry-hub-and-project/main/infra/scripts/Install-DevTools.ps1'
+
 // =====================================================
 // VARIABLES
 // =====================================================
@@ -310,6 +313,7 @@ module windowsVm 'modules/windowsVm.bicep' = {
     adminUsername: vmAdminUsername
     adminPassword: vmAdminPassword
     subnetId: network.outputs.workloadSubnetId
+    devToolsScriptUrl: devToolsScriptUrl
   }
 }
 
