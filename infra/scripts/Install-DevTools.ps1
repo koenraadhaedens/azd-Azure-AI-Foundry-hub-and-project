@@ -255,6 +255,50 @@ Install-WithDownload `
     -Arguments "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0"
 
 # ============================================================================
+# Install .NET SDK
+# ============================================================================
+Write-Host ""
+Write-Host "========================================"
+Write-Host "Installing .NET SDK"
+Write-Host "========================================"
+
+try {
+    Write-Host "[.NET SDK 8.0] Downloading installer script..."
+    
+    # Ensure TLS 1.2 (some environments default lower)
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    
+    # Download the installer script from the stable endpoint
+    $dl = "$env:TEMP\dotnet-install.ps1"
+    Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -OutFile $dl -UseBasicParsing
+    
+    Write-Host "[.NET SDK 8.0] Installing SDK version 8.0.101..."
+    
+    # Install specific SDK version (machine dir). Requires admin.
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $dl -Version 8.0.101 -InstallDir "C:\Program Files\dotnet" -Quality GA
+    
+    Write-Host "[.NET SDK 8.0] Updating PATH environment variable..."
+    
+    # Make sure PATH includes the machine-wide dotnet
+    $machineDotnet = "C:\Program Files\dotnet"
+    $inPath = [Environment]::GetEnvironmentVariable("Path","Machine") -split ";" | Where-Object { $_ -eq $machineDotnet }
+    if (-not $inPath) {
+        $newPath = ([Environment]::GetEnvironmentVariable("Path","Machine") + ";$machineDotnet").Trim(';')
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
+        Write-Host "[.NET SDK 8.0] PATH updated successfully."
+    } else {
+        Write-Host "[.NET SDK 8.0] PATH already contains dotnet directory."
+    }
+    
+    # Clean up installer script
+    Remove-Item $dl -Force -ErrorAction SilentlyContinue
+    
+    Write-Host "[.NET SDK 8.0] Installation completed successfully."
+} catch {
+    Write-Host "[.NET SDK 8.0] Installation failed: $($_.Exception.Message)"
+}
+
+# ============================================================================
 # Create Desktop Shortcuts
 # ============================================================================
 Write-Host ""
@@ -374,6 +418,7 @@ if (Test-Path "C:\Program Files\PowerShell\7\pwsh.exe") { $installed += "PowerSh
 if (Test-Path "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") { $installed += "Microsoft Edge" } else { $notInstalled += "Microsoft Edge" }
 if (Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe") { $installed += "Google Chrome" } else { $notInstalled += "Google Chrome" }
 if (Test-Path "C:\Program Files\Python312\python.exe") { $installed += "Python" } else { $notInstalled += "Python" }
+if (Test-Path "C:\Program Files\dotnet\dotnet.exe") { $installed += ".NET SDK" } else { $notInstalled += ".NET SDK" }
 if (Test-Path "C:\LabFiles") { $installed += "Lab Files" } else { $notInstalled += "Lab Files" }
 
 Write-Host ""
