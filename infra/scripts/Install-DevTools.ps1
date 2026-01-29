@@ -255,18 +255,18 @@ Install-WithDownload `
     -Arguments "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0"
 
 # ============================================================================
-# Install .NET SDK
+# Install .NET SDK 8.0
 # ============================================================================
 Write-Host ""
 Write-Host "========================================"
-Write-Host "Installing .NET SDK"
+Write-Host "Installing .NET SDK 8.0"
 Write-Host "========================================"
 
-try {
-    winget install --id Microsoft.DotNet.SDK.8 --exact --scope machine --silent --disable-interactivity --accept-package-agreements --accept-source-agreements
-} catch {
-    Write-Host "[.NET SDK 8.0] Installation failed: $($_.Exception.Message)"
-}
+Install-WithDownload `
+    -Name ".NET SDK 8.0" `
+    -Url "https://download.visualstudio.microsoft.com/download/pr/f5f90e93-c7d5-4f87-b824-0e1c4c4e4f47/b12a01fca4e69831c60b21e9b70c7d82/dotnet-sdk-8.0.404-win-x64.exe" `
+    -FileName "dotnet-sdk-8.0.exe" `
+    -Arguments "/install /quiet /norestart"
 
 # ============================================================================
 # Create Desktop Shortcuts
