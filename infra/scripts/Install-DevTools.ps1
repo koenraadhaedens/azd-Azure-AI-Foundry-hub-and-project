@@ -264,7 +264,7 @@ Write-Host "========================================"
 
 Install-WithDownload `
     -Name ".NET SDK 8.0" `
-    -Url "https://download.visualstudio.microsoft.com/download/pr/f5f90e93-c7d5-4f87-b824-0e1c4c4e4f47/b12a01fca4e69831c60b21e9b70c7d82/dotnet-sdk-8.0.404-win-x64.exe" `
+    -Url "https://aka.ms/dotnet/8.0/dotnet-sdk-win-x64.exe" `
     -FileName "dotnet-sdk-8.0.exe" `
     -Arguments "/install /quiet /norestart"
 
