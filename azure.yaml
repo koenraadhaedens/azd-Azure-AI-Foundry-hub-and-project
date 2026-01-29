@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
-name: azure-ai-foundry-private
+name: tdd-azure-ai-foundry-private
 metadata:
-  template: azd-Azure-AI-Foundry-hub-and-project@1.0.0
+  template: tdd-Azure-AI-Foundry-hub-and-project@1.0.0
 
 infra:
   provider: bicep
