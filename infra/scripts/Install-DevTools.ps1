@@ -333,6 +333,34 @@ try {
         
         Write-Host "[Lab Files] Extraction complete."
         
+        # ============================================================================
+        # Unzip AI-3002 content.zip to dedicated folder
+        # ============================================================================
+        Write-Host ""
+        Write-Host "[Lab Files] Extracting AI-3002 content.zip..."
+        
+        try {
+            $contentZipPath = "C:\LabFiles\Demos\AI-3002\mslearn-ai-info-extraction-AI-3002-Develop-AI-information-extraction-solutions-in-Azure-AI-102-Day-5-main\Labfiles\content\content.zip"
+            $contentDestination = "C:\LabFiles\Demos\AI-3002\content"
+            
+            if (Test-Path $contentZipPath) {
+                # Create destination folder if it doesn't exist
+                if (-not (Test-Path $contentDestination)) {
+                    New-Item -ItemType Directory -Path $contentDestination -Force | Out-Null
+                    Write-Host "[Lab Files] Created destination folder: $contentDestination"
+                }
+                
+                # Extract the content.zip file
+                Write-Host "[Lab Files] Extracting content.zip to: $contentDestination"
+                Expand-Archive -Path $contentZipPath -DestinationPath $contentDestination -Force
+                Write-Host "[Lab Files] AI-3002 content.zip extraction complete."
+            } else {
+                Write-Host "[Lab Files] content.zip not found at: $contentZipPath"
+            }
+        } catch {
+            Write-Host "[Lab Files] Failed to extract content.zip: $($_.Exception.Message)"
+        }
+        
         # Create VS Code shortcut to open Lab Files folder
         Write-Host "[Lab Files] Creating VS Code shortcut on desktop..."
         $vsCodePath = "C:\Program Files\Microsoft VS Code\Code.exe"
