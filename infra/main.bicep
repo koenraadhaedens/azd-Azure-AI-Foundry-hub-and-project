@@ -15,7 +15,13 @@ param environmentName string
   'westus'
   'swedencentral'
 ])
-param location string = 'westus'
+@metadata({
+  azd: {
+    type: 'location'
+    default: 'westus'
+  }
+})
+param location string
 
 @description('Name prefix for all resources (keep short to avoid name length limits)')
 @minLength(2)
