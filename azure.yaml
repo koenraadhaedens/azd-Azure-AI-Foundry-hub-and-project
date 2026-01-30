@@ -7,6 +7,14 @@ infra:
   provider: bicep
   path: infra
   module: main
+  parameters:
+    location:
+      type: string
+      default: westus
+      allowed:
+        - westus
+        - swedencentral
+      description: "Azure region for deployment (only westus and swedencentral fully support all required features)"
 
 pipeline:
   provider: github
