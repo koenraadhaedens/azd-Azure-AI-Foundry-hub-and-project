@@ -10,8 +10,12 @@ targetScope = 'subscription'
 param environmentName string
 
 @minLength(1)
-@description('Primary location for all resources')
-param location string
+@description('Primary location for all resources. Only westus and swedencentral fully support all required features.')
+@allowed([
+  'westus'
+  'swedencentral'
+])
+param location string = 'westus'
 
 @description('Name prefix for all resources (keep short to avoid name length limits)')
 @minLength(2)
