@@ -32,7 +32,7 @@ param enableSoftDelete bool = true
 param softDeleteRetentionInDays int = 90
 
 @description('Enable purge protection')
-param enablePurgeProtection bool = false
+param enablePurgeProtection bool = true
 
 // ============================================================================
 // Key Vault - Secure Configuration with RBAC
