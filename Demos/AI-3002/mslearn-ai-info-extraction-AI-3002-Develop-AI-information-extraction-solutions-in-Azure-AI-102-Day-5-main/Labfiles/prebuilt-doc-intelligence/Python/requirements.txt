@@ -1,2 +1,3 @@
-python-dotenvazure-identity
+python-dotenv
+azure-identity
 azure-ai-documentintelligence
