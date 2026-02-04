@@ -99,7 +99,6 @@ var bastionPipName = '${abbrs.networkPublicIPAddresses}${namePrefix}-bastion-${r
 var natGatewayName = '${abbrs.networkNatGateways}${namePrefix}-${resourceToken}'
 var natGatewayPipName = '${abbrs.networkPublicIPAddresses}${namePrefix}-natgw-${resourceToken}'
 var storageAccountName = '${abbrs.storageStorageAccounts}${namePrefix}${resourceToken}'
-var keyVaultName = '${abbrs.keyVaultVaults}${namePrefix}-${resourceToken}'
 var acrName = '${abbrs.containerRegistryRegistries}${namePrefix}${resourceToken}'
 var logAnalyticsName = '${abbrs.operationalInsightsWorkspaces}${namePrefix}-${resourceToken}'
 var appInsightsName = '${abbrs.insightsComponents}${namePrefix}-${resourceToken}'
@@ -197,23 +196,6 @@ module storage 'modules/storage.bicep' = {
 }
 
 // =====================================================
-// KEY VAULT MODULE
-// =====================================================
-
-module keyVault 'modules/keyvault.bicep' = {
-  name: 'keyvault-deployment'
-  scope: rg
-  params: {
-    location: location
-    tags: tags
-    keyVaultName: keyVaultName
-    subnetId: network.outputs.workloadSubnetId
-    privateDnsZoneId: privateDns.outputs.privateDnsZoneKeyVaultId
-    aadObjectIdForOwners: aadObjectIdForOwners
-  }
-}
-
-// =====================================================
 // CONTAINER REGISTRY MODULE
 // =====================================================
 
@@ -296,7 +278,6 @@ module aiFoundry 'modules/aiFoundry.bicep' = {
     aiHubName: aiHubName
     aiProjectName: aiProjectName
     storageAccountId: storage.outputs.storageAccountId
-    keyVaultId: keyVault.outputs.keyVaultId
     containerRegistryId: acr.outputs.acrId
     applicationInsightsId: monitor.outputs.appInsightsId
     subnetId: network.outputs.workloadSubnetId
@@ -364,10 +345,6 @@ output VM_PRIVATE_IP string = windowsVm.outputs.vmPrivateIp
 // Storage
 output STORAGE_ACCOUNT_NAME string = storage.outputs.storageAccountName
 output STORAGE_ACCOUNT_ID string = storage.outputs.storageAccountId
-
-// Key Vault
-output KEYVAULT_NAME string = keyVault.outputs.keyVaultName
-output KEYVAULT_URI string = keyVault.outputs.keyVaultUri
 
 // ACR
 output ACR_NAME string = acr.outputs.acrName
