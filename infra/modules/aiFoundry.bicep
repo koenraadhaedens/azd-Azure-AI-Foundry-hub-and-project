@@ -26,8 +26,8 @@ param aiHubDescription string = 'Azure AI Foundry Hub for centralized AI resourc
 @description('Description for the Project')
 param aiProjectDescription string = 'Azure AI Foundry Project for AI development'
 
-@description('Key Vault ID for secrets')
-param keyVaultId string
+@description('Key Vault ID for secrets (optional - if not provided, Microsoft-managed credential store will be used)')
+param keyVaultId string = ''
 
 @description('Storage Account ID for data')
 param storageAccountId string
@@ -76,7 +76,7 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01' = {
     friendlyName: aiHubDisplayName
     description: aiHubDescription
     storageAccount: storageAccountId
-    keyVault: keyVaultId
+    keyVault: !empty(keyVaultId) ? keyVaultId : null
     containerRegistry: containerRegistryId
     applicationInsights: applicationInsightsId
     publicNetworkAccess: 'Disabled' // CRITICAL: No public access
@@ -217,7 +217,7 @@ resource hubAiDeveloperRoles 'Microsoft.Authorization/roleAssignments@2022-04-01
 // Key Vault Secrets User role for Hub
 var keyVaultSecretsUserRole = resourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
 
-resource hubKeyVaultRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+resource hubKeyVaultRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(keyVaultId)) {
   name: guid(keyVaultId, aiHub.id, keyVaultSecretsUserRole)
   scope: resourceGroup()
   properties: {

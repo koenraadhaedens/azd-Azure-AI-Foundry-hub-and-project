@@ -28,9 +28,6 @@ var aiDeveloperRole = resourceId('Microsoft.Authorization/roleDefinitions', '647
 // Storage Blob Data Contributor - read/write blob data
 var storageBlobDataContributorRole = resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
 
-// Key Vault Secrets User - read secrets
-var keyVaultSecretsUserRole = resourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
-
 // Reader role - read all resources
 var readerRole = resourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')
 
@@ -79,15 +76,6 @@ resource vmStorageBlobDataContributorRole 'Microsoft.Authorization/roleAssignmen
   properties: {
     principalId: vmPrincipalId
     roleDefinitionId: storageBlobDataContributorRole
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource vmKeyVaultSecretsUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroup().id, vmPrincipalId, keyVaultSecretsUserRole)
-  properties: {
-    principalId: vmPrincipalId
-    roleDefinitionId: keyVaultSecretsUserRole
     principalType: 'ServicePrincipal'
   }
 }
@@ -146,15 +134,6 @@ resource userStorageBlobDataContributorRole 'Microsoft.Authorization/roleAssignm
   properties: {
     principalId: deployingUserPrincipalId
     roleDefinitionId: storageBlobDataContributorRole
-    principalType: 'User'
-  }
-}
-
-resource userKeyVaultSecretsUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(deployingUserPrincipalId)) {
-  name: guid(resourceGroup().id, deployingUserPrincipalId, keyVaultSecretsUserRole)
-  properties: {
-    principalId: deployingUserPrincipalId
-    roleDefinitionId: keyVaultSecretsUserRole
     principalType: 'User'
   }
 }

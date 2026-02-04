@@ -32,9 +32,9 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 │  │  │  │  ┌──────────┐  ┌──────────────────────────────────────┐ ││  │  │
 │  │  │  │  │ Windows  │  │    Private Endpoints (All PaaS)      │ ││  │  │
 │  │  │  │  │ Jumpbox  │  │  • Storage (blob,file,queue,table)   │ ││  │  │
-│  │  │  │  │   VM     │  │  • Key Vault                         │ ││  │  │
-│  │  │  │  │(no PubIP)│  │  • Container Registry                │ ││  │  │
-│  │  │  │  └──────────┘  │  • AI Foundry Hub                    │ ││  │  │
+│  │  │  │  │  │   VM     │  │  • Container Registry                │ ││  │  │
+│  │  │  │  │  │(no PubIP)│  │  • AI Foundry Hub                    │ ││  │  │
+│  │  │  │  │  └──────────┘  │  • Cognitive Services (optional)     │ ││  │  │
 │  │  │  │                │  • Cognitive Services (optional)     │ ││  │  │
 │  │  │  │                └──────────────────────────────────────┘ ││  │  │
 │  │  │  └─────────────────────────────────────────────────────────┘│  │  │
@@ -46,16 +46,17 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 │  │  │  └─────────────────────────────────────────────────────────┘│  │  │
 │  │  └─────────────────────────────────────────────────────────────┘  │  │
 │  │                                                                   │  │
-│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐  │  │
-│  │  │   Storage   │ │  Key Vault  │ │     ACR     │ │  Log/AppIns │  │  │
-│  │  │ (no keys)   │ │  (RBAC)     │ │ (no admin)  │ │             │  │  │
-│  │  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘  │  │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐  │  │
+│  │  │   Storage   │ │     ACR     │ │  Log/AppIns │  │  │
+│  │  │ (no keys)   │ │ (no admin)  │ │             │  │  │
+│  │  └─────────────┘ └─────────────┘ └─────────────┘  │  │
 │  │                                                                   │  │
 │  │  ┌───────────────────────────────────────────────────────────────┐│  │
 │  │  │              AI Foundry Hub + Project                         ││  │
 │  │  │  • publicNetworkAccess: Disabled                              ││  │
 │  │  │  • Managed network with internet outbound                     ││  │
-│  │  │  • Connected to Storage, KV, ACR, App Insights                ││  │
+│  │  │  • Connected to Storage, ACR, App Insights                    ││  │
+│  │  │  • Microsoft-managed credential store (no Key Vault needed)   ││  │
 │  │  │  • Optional: Cognitive Services / Azure OpenAI connection     ││  │
 │  │  └───────────────────────────────────────────────────────────────┘│  │
 │  └───────────────────────────────────────────────────────────────────┘  │
@@ -67,7 +68,6 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 | Resource | Security Configuration |
 |----------|----------------------|
 | **Storage Account** | `allowSharedKeyAccess: false`, `publicNetworkAccess: Disabled`, `allowBlobPublicAccess: false` |
-| **Key Vault** | `enableRbacAuthorization: true`, `publicNetworkAccess: Disabled` |
 | **Container Registry** | `adminUserEnabled: false`, `publicNetworkAccess: Disabled` |
 | **Cognitive Services** | `disableLocalAuth: true`, `publicNetworkAccess: Disabled` |
 | **AI Foundry Hub/Project** | `publicNetworkAccess: Disabled`, System-assigned managed identity |
@@ -84,7 +84,6 @@ The following roles are automatically assigned on the resource group to both the
 | **Azure ML Data Scientist** | Work with Azure Machine Learning workspaces |
 | **Azure AI Developer** | Develop AI applications |
 | **Storage Blob Data Contributor** | Read, write, and delete blob data |
-| **Key Vault Secrets User** | Read secrets from Key Vault |
 | **Reader** | Read access to all resources in the resource group |
 
 > 💡 These roles enable both the jumpbox VM (via its system-assigned managed identity) and the user running the deployment to interact with all AI Foundry resources without requiring keys or connection strings.
