@@ -3,7 +3,8 @@ from datetime import datetime
 import os
 
 # Import namespaces
-
+from azure.identity import DefaultAzureCredential
+import azure.cognitiveservices.speech as speech_sdk
 
 def main():
 
@@ -15,11 +16,15 @@ def main():
 
         # Get config settings
         load_dotenv()
-        speech_key = os.getenv('KEY')
         speech_region = os.getenv('REGION')
+        speech_resource_id = os.getenv('SPEECH_RESOURCE_ID')
 
-        # Configure speech service
-        
+        # Configure speech service with managed identity
+        credential = DefaultAzureCredential()
+        token = credential.get_token('https://cognitiveservices.azure.com/.default')
+        auth_token = 'aad#' + speech_resource_id + '#' + token.token
+        speech_config = speech_sdk.SpeechConfig(auth_token=auth_token, region=speech_region)
+        print('Ready to use speech service in:', speech_config.region)    
 
         # Get spoken input
         command = TranscribeCommand()
@@ -32,10 +37,25 @@ def main():
 def TranscribeCommand():
     command = ''
 
+    
     # Configure speech recognition
+    current_dir = os.getcwd()
+    audioFile = current_dir + '/time.wav'
+    audio_config = speech_sdk.AudioConfig(filename=audioFile)
+    speech_recognizer = speech_sdk.SpeechRecognizer(speech_config, audio_config)
 
-
-    # Process speech input
+   # Process speech input
+    print("Listening...")
+    speech = speech_recognizer.recognize_once_async().get()
+    if speech.reason == speech_sdk.ResultReason.RecognizedSpeech:
+        command = speech.text
+        print(command)
+    else:
+        print(speech.reason)
+        if speech.reason == speech_sdk.ResultReason.Canceled:
+            cancellation = speech.cancellation_details
+            print(cancellation.reason)
+            print(cancellation.error_details)
 
 
     # Return the command
