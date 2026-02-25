@@ -52,6 +52,9 @@ param enableDocumentIntelligence bool = true
 @description('Deploy Azure AI Language resource')
 param enableAILanguage bool = true
 
+@description('Deploy Azure AI Search resource')
+param enableAISearch bool = true
+
 @description('Admin username for the Windows VM')
 param vmAdminUsername string = 'azureadmin'
 
@@ -107,6 +110,7 @@ var aiProjectName = '${abbrs.machineLearningServicesWorkspaces}proj-${namePrefix
 var cognitiveServicesName = '${abbrs.cognitiveServicesAccounts}${namePrefix}-${resourceToken}'
 var documentIntelligenceName = '${abbrs.cognitiveServicesAccounts}docint-${namePrefix}-${resourceToken}'
 var aiLanguageName = '${abbrs.cognitiveServicesAccounts}lang-${namePrefix}-${resourceToken}'
+var aiSearchName = '${abbrs.searchSearchServices}${namePrefix}-${resourceToken}'
 var vmName = '${abbrs.computeVirtualMachines}${namePrefix}-jump'
 
 // =====================================================
@@ -266,6 +270,22 @@ module aiLanguage 'modules/aiLanguage.bicep' = if (enableAILanguage) {
 }
 
 // =====================================================
+// AZURE AI SEARCH MODULE
+// =====================================================
+
+module aiSearch 'modules/aiSearch.bicep' = if (enableAISearch) {
+  name: 'ai-search-deployment'
+  scope: rg
+  params: {
+    location: location
+    tags: tags
+    aiSearchName: aiSearchName
+    subnetId: network.outputs.workloadSubnetId
+    privateDnsZoneId: privateDns.outputs.privateDnsZoneAiSearchId
+  }
+}
+
+// =====================================================
 // AI FOUNDRY (HUB + PROJECT) MODULE
 // =====================================================
 
@@ -373,3 +393,8 @@ output DOCUMENT_INTELLIGENCE_PRINCIPAL_ID string = documentIntelligence.?outputs
 output AI_LANGUAGE_NAME string = aiLanguage.?outputs.?aiLanguageName ?? ''
 output AI_LANGUAGE_ENDPOINT string = aiLanguage.?outputs.?aiLanguageEndpoint ?? ''
 output AI_LANGUAGE_PRINCIPAL_ID string = aiLanguage.?outputs.?aiLanguagePrincipalId ?? ''
+
+// Azure AI Search (if enabled)
+output AI_SEARCH_NAME string = aiSearch.?outputs.?aiSearchName ?? ''
+output AI_SEARCH_ENDPOINT string = aiSearch.?outputs.?aiSearchEndpoint ?? ''
+output AI_SEARCH_PRINCIPAL_ID string = aiSearch.?outputs.?aiSearchPrincipalId ?? ''

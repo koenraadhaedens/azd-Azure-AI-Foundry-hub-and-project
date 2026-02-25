@@ -35,6 +35,8 @@ var privateDnsZones = [
   // Azure Machine Learning / AI Foundry
   'privatelink.api.azureml.ms'
   'privatelink.notebooks.azure.net'
+  // Azure AI Search
+  'privatelink.search.windows.net'
 ]
 
 // ============================================================================
@@ -79,3 +81,4 @@ output privateDnsZoneOpenAiId string = dnsZones[7].id
 output privateDnsZoneAiServicesId string = dnsZones[8].id
 output privateDnsZoneAmlApiId string = dnsZones[9].id
 output privateDnsZoneAmlNotebooksId string = dnsZones[10].id
+output privateDnsZoneAiSearchId string = dnsZones[11].id
