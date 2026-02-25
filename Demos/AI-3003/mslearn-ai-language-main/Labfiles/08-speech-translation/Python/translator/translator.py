@@ -2,8 +2,10 @@ from dotenv import load_dotenv
 from datetime import datetime
 import os
 
-# Import namespaces
 
+# Import namespaces
+from azure.identity import DefaultAzureCredential
+import azure.cognitiveservices.speech as speech_sdk
 
 def main():
     try:
@@ -12,14 +14,26 @@ def main():
 
         # Get Configuration Settings
         load_dotenv()
-        speech_key = os.getenv('KEY')
-        speech_region = os.getenv('REGION')
+        speech_region = os.getenv('TRANSLATOR_REGION')
+        speech_resource_id = os.getenv('TRANSLATOR_ENDPOINT')
+
+        # Get access token from managed identity
+        credential = DefaultAzureCredential()
+        token = credential.get_token('https://cognitiveservices.azure.com/.default')
 
         # Configure translation
+        auth_token = 'aad#' + speech_resource_id + '#' + token.token
+        translation_config = speech_sdk.translation.SpeechTranslationConfig(auth_token=auth_token, region=speech_region)
+        translation_config.speech_recognition_language = 'en-US'
+        translation_config.add_target_language('fr')
+        translation_config.add_target_language('es')
+        translation_config.add_target_language('hi')
+        print('Ready to translate from',translation_config.speech_recognition_language)
 
-
+       
         # Configure speech
-
+        speech_config = speech_sdk.SpeechConfig(auth_token=auth_token, region=speech_region)
+        print('Ready to use speech service in:', speech_config.region)
 
         # Get user input
         targetLanguage = ''
@@ -37,8 +51,17 @@ def main():
 def Translate(targetLanguage):
     translation = ''
 
-    # Translate speech
 
+    # Translate speech
+    current_dir = os.getcwd()
+    audioFile = current_dir + '/station.wav'
+    audio_config_in = speech_sdk.AudioConfig(filename=audioFile)
+    translator = speech_sdk.translation.TranslationRecognizer(translation_config, audio_config = audio_config_in)
+    print("Getting speech from file...")
+    result = translator.recognize_once_async().get()
+    print('Translating "{}"'.format(result.text))
+    translation = result.translations[targetLanguage]
+    print(translation)
 
     # Synthesize translation
 
