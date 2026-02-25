@@ -2,18 +2,19 @@ from dotenv import load_dotenv
 import os
 
 # Import namespaces
-from azure.core.credentials import AzureKeyCredential
 from azure.ai.textanalytics import TextAnalyticsClient
+from azure.identity import DefaultAzureCredential
+
+
 
 def main():
     try:
         # Get Configuration Settings
         load_dotenv()
         ai_endpoint = os.getenv('AI_SERVICE_ENDPOINT')
-        ai_key = os.getenv('AI_SERVICE_KEY')
 
-        # Create client using endpoint and key
-        credential = AzureKeyCredential(ai_key)
+        # Create client using endpoint and managed identity
+        credential = DefaultAzureCredential()
         ai_client = TextAnalyticsClient(endpoint=ai_endpoint, credential=credential)
 
         # Analyze each text file in the reviews folder
