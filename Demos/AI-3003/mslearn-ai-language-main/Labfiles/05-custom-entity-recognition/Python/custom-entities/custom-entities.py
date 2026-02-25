@@ -2,19 +2,20 @@ from dotenv import load_dotenv
 import os
 
 # import namespaces
-
+from azure.identity import DefaultAzureCredential
+from azure.ai.textanalytics import TextAnalyticsClient
 
 def main():
     try:
         # Get Configuration Settings
         load_dotenv()
         ai_endpoint = os.getenv('AI_SERVICE_ENDPOINT')
-        ai_key = os.getenv('AI_SERVICE_KEY')
         project_name = os.getenv('PROJECT')
         deployment_name = os.getenv('DEPLOYMENT')
 
-        # Create client using endpoint and key
-
+        # Create client using managed identity
+        credential = DefaultAzureCredential()
+        ai_client = TextAnalyticsClient(endpoint=ai_endpoint, credential=credential)
 
         # Read each text file in the ads folder
         batchedDocuments = []
