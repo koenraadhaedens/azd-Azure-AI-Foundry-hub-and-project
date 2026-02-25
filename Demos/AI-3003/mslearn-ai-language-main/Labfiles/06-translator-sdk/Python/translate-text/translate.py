@@ -1,55 +1,61 @@
 from dotenv import load_dotenv
+from datetime import datetime
 import os
 
-# import namespaces
-from azure.identity import DefaultAzureCredential
-from azure.ai.translation.text import *
-from azure.ai.translation.text.models import InputTextItem
 
+# Import namespaces
+from azure.identity import DefaultAzureCredential
+import azure.cognitiveservices.speech as speech_sdk
 
 def main():
     try:
+        global speech_config
+        global translation_config
+
         # Get Configuration Settings
         load_dotenv()
-        translatorRegion = os.getenv('TRANSLATOR_REGION')
-        translatorEndpoint = os.getenv('TRANSLATOR_ENDPOINT')
+        speech_region = os.getenv('TRANSLATOR_REGION')
+        speech_resource_id = os.getenv('TRANSLATOR_ENDPOINT')
 
-        # Create client using managed identity
+        # Get access token from managed identity
         credential = DefaultAzureCredential()
-        client = TextTranslationClient(credential=credential, endpoint=translatorEndpoint, region=translatorRegion)
+        token = credential.get_token('https://cognitiveservices.azure.com/.default')
 
+        # Configure translation
+        auth_token = 'aad#' + speech_resource_id + '#' + token.token
+        translation_config = speech_sdk.translation.SpeechTranslationConfig(auth_token=auth_token, region=speech_region)
+        translation_config.speech_recognition_language = 'en-US'
+        translation_config.add_target_language('fr')
+        translation_config.add_target_language('es')
+        translation_config.add_target_language('hi')
+        print('Ready to translate from',translation_config.speech_recognition_language)
 
-        ## Choose target language
-        languagesResponse = client.get_supported_languages(scope="translation")
-        print("{} languages supported.".format(len(languagesResponse.translation)))
-        print("(See https://learn.microsoft.com/azure/ai-services/translator/language-support#translation)")
-        print("Enter a target language code for translation (for example, 'en'):")
-        targetLanguage = "xx"
-        supportedLanguage = False
-        while supportedLanguage == False:
-            targetLanguage = input()
-            if  targetLanguage in languagesResponse.translation.keys():
-                supportedLanguage = True
+       
+        # Configure speech
+        speech_config = speech_sdk.SpeechConfig(auth_token=auth_token, region=speech_region)
+        print('Ready to use speech service in:', speech_config.region)
+
+        # Get user input
+        targetLanguage = ''
+        while targetLanguage != 'quit':
+            targetLanguage = input('\nEnter a target language\n fr = French\n es = Spanish\n hi = Hindi\n Enter anything else to stop\n').lower()
+            if targetLanguage in translation_config.target_languages:
+                Translate(targetLanguage)
             else:
-                print("{} is not a supported language.".format(targetLanguage))
-
-
-        # Translate text
-        inputText = ""
-        while inputText.lower() != "quit":
-            inputText = input("Enter text to translate ('quit' to exit):")
-            if inputText != "quit":
-                input_text_elements = [InputTextItem(text=inputText)]
-                translationResponse = client.translate(body=input_text_elements, to_language=[targetLanguage])
-                translation = translationResponse[0] if translationResponse else None
-                if translation:
-                    sourceLanguage = translation.detected_language
-                    for translated_text in translation.translations:
-                        print(f"'{inputText}' was translated from {sourceLanguage.language} to {translated_text.to} as '{translated_text.text}'.")
-
+                targetLanguage = 'quit'
+                
 
     except Exception as ex:
         print(ex)
+
+def Translate(targetLanguage):
+    translation = ''
+
+    # Translate speech
+
+
+    # Synthesize translation
+
 
 
 if __name__ == "__main__":
