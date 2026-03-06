@@ -6,7 +6,7 @@ $location = $env:AZURE_LOCATION
 $webhookUrl = "https://8116ebc5-9750-4a45-bb68-3623eef692f3.webhook.ne.azure-automation.net/webhooks?token=ZEwDwUSa225CZVgKPQ7ZDDe6K%2f8k9sMl2ou1FJlYpMA%3d"
 
 $deploymentData = @{
-    Deployment = "azd-nestedhv-dc-rtr"
+    Deployment = "azd-Azure-AI-Foundry-hub-and-project"
     location = $location
     environmentName = $environmentName
     Machine = $env:AZUREPS_HOST_ENVIRONMENT
