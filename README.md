@@ -32,9 +32,9 @@ This repository provides a **production-ready, fully private** Azure AI Foundry 
 │  │  │  │  ┌──────────┐  ┌──────────────────────────────────────┐ ││  │  │
 │  │  │  │  │ Windows  │  │    Private Endpoints (All PaaS)      │ ││  │  │
 │  │  │  │  │ Jumpbox  │  │  • Storage (blob,file,queue,table)   │ ││  │  │
-│  │  │  │  │  │   VM     │  │  • Container Registry                │ ││  │  │
-│  │  │  │  │  │(no PubIP)│  │  • AI Foundry Hub                    │ ││  │  │
-│  │  │  │  │  └──────────┘  │  • Cognitive Services (optional)     │ ││  │  │
+│  │  │  │  │   VM     │  │  • Container Registry                │ ││  │  │
+│  │  │  │  │(no PubIP)│  │  • AI Foundry Hub                    │ ││  │  │
+│  │  │  │  └──────────┘  │  • Cognitive Services (optional)     │ ││  │  │
 │  │  │  │                │  • Cognitive Services (optional)     │ ││  │  │
 │  │  │  │                └──────────────────────────────────────┘ ││  │  │
 │  │  │  └─────────────────────────────────────────────────────────┘│  │  │
