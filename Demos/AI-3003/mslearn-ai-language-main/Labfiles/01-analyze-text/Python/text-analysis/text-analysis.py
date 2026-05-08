@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import os
 
 # import namespaces
@@ -11,12 +10,12 @@ def main():
         # Clear the console
         os.system('cls' if os.name == 'nt' else 'clear')
 
-        # Get Configuration Settings
-        load_dotenv()
+        # Get Configuration Settings from environment variables
+        # When running in Azure, managed identity will automatically handle authentication
         foundry_endpoint = os.getenv('FOUNDRY_ENDPOINT')
 
-
-        # Create client using endpoint
+        # Create client using Managed Identity for authentication
+        # DefaultAzureCredential will use managed identity when running in Azure
         credential = DefaultAzureCredential()
         ai_client = TextAnalyticsClient(endpoint=foundry_endpoint, credential=credential)
 
