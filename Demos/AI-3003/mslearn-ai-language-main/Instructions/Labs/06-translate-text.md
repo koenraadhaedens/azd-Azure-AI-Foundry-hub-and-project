@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Translate Text'
+    title: 'Translate Text  (deprecated)'
     description: "Translate provided text between any supported languages with Azure AI Translator."
+    islab: false
 ---
 
-# Translate Text
+# Translate Text (deprecated)
+
+> **Note**: This exercise is deprecated. Consider completing the replacement exercise at <https://go.microsoft.com/fwlink/?linkid=2356176>.
 
 **Azure AI Translator** is a service that enables you to translate text between languages. In this exercise, you'll use it to create a simple app that translates input in any supported language to the target language of your choice.
 
@@ -72,8 +75,8 @@ To test the text translation capabilities of Azure AI Translator, you'll develop
 1. Create a Python virtual environment and install the Azure AI Translation SDK package and other required packages by running the following command:
 
     ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
+   python -m venv labenv;
+   ./labenv/bin/Activate.ps1;
    pip install -r requirements.txt azure-ai-translation-text==1.0.1
     ```
 

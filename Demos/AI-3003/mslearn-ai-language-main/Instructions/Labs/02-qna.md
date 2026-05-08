@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Create a Question Answering solution'
+    title: 'Create a Question Answering solution  (deprecated)'
     description: "Use Azure AI Language to create a custom question answering solution."
+    islab: false
 ---
 
-# Create a Question Answering Solution
+# Create a Question Answering Solution (deprecated)
+
+> **Note**: This exercise is deprecated. Consider reviewing the QuickStart tutorial at <https://learn.microsoft.com/azure/ai-services/language-service/question-answering/quickstart>
 
 One of the most common conversational scenarios is providing support through a knowledge base of frequently asked questions (FAQs). Many organizations publish FAQs as documents or web pages, which works well for a small set of question and answer pairs, but large documents can be difficult and time-consuming to search.
 
@@ -79,7 +82,6 @@ You can create a knowledge base from scratch, but it's common to start by import
     - **URL**: `https://learn.microsoft.com/en-us/training/support/faq?pivots=general`
 1. On the **Manage sources** page for your question answering project, in the **&#9547; Add source** list, select **Chitchat**. The in the **Add chit chat** dialog box, select **Friendly** and select **Add chit chat**.
 
-
 > **NOTE**  
 > If you encounter the error **BadArgument Invalid input**, follow these steps as a workaround:
 >
@@ -91,7 +93,6 @@ You can create a knowledge base from scratch, but it's common to start by import
 > - Save the file locally.
 > - Go back to the **Manage sources** page, select **+ Add source**, and choose **Files**.
 > - Select **+ Add File**, enter `Learn FAQ Page` as the name, upload the saved PDF, and select **Add all**.
-
 
 ## Edit the knowledge base
 
@@ -177,9 +178,9 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 1. Create a Python virtual environment and install the Azure AI Language Question Answering SDK package and other required packages by running the following command:
 
     ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-language-questionanswering
+   python -m venv labenv;
+    ./labenv/bin/Activate.ps1;
+    pip install -r requirements.txt azure-ai-language-questionanswering
     ```
 
 1. Enter the following command to edit the configuration file:
@@ -193,7 +194,7 @@ You'll develop your question answering app using Cloud Shell in the Azure portal
 1. In the code file, update the configuration values it contains to reflect the **endpoint** and an authentication **key** for the Azure Language resource you created (available on the **Keys and Endpoint** page for your Azure AI Language resource in the Azure portal). The project name and deployment name for your deployed knowledge base should also be in this file.
 1. After you've replaced the placeholders, within the code editor, use the **CTRL+S** command or **Right-click > Save** to save your changes and then use the **CTRL+Q** command or **Right-click > Quit** to close the code editor while keeping the cloud shell command line open.
 
-## Add code to user your knowledge base
+## Add code to use your knowledge base
 
 1. Enter the following command to edit the application code file:
 

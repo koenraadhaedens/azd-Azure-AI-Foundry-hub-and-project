@@ -1,5 +1,1 @@
 python-dotenv
-requests
-azure-identity
-azure-ai-projects
-openai

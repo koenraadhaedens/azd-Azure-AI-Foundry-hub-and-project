@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Create a language understanding model with the Azure AI Language service'
+    title: 'Create a language understanding model with the Azure AI Language service  (deprecated)'
     description: "Create a custom language understanding model to interpret input, predict intent, and identify entities."
+    islab: false
 ---
 
-# Create a language understanding model with the Language service
+# Create a language understanding model with the Language service (deprecated)
+
+> **Note**: This exercise is deprecated. Consider reviewing the QuickStart tutorial at <https://learn.microsoft.com/azure/ai-services/language-service/conversational-language-understanding/quickstart>.
 
 The Azure AI Language service enables you to define a *conversational language understanding* model that applications can use to interpret natural language *utterances* from users (text or spoken input),  predict the users *intent* (what they want to achieve), and identify any *entities* to which the intent should be applied.
 
@@ -113,7 +116,7 @@ To help the model predict which intent a user is requesting, you must label each
     - `tell me the time`
 
     > **NOTE**
-    > To add a new utterance, write the utterance in the textbox next to the intent and then press ENTER. 
+    > To add a new utterance, write the utterance in the textbox next to the intent and then press ENTER.
 
 1. Select the **GetDay** intent and add the following utterances as example input for that intent:
     - `what day is it?`
@@ -360,10 +363,11 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
 1. Create a Python virtual environment and install the Azure AI Language Conversations SDK package and other required packages by running the following command:
 
     ```
-   python -m venv labenv
-    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-language-conversations==1.1.0
+   python -m venv labenv;
+    ./labenv/bin/Activate.ps1;
+    pip install -r requirements.txt azure-ai-language-conversations==1.1.0
     ```
+
 1. Enter the following command to edit the configuration file:
 
     ```
@@ -520,9 +524,9 @@ You'll develop your language understanding app using Cloud Shell in the Azure po
     *What day is 01/01/2025?*
 
     > **Note**: The logic in the application is deliberately simple, and has a number of limitations. For example, when getting the time, only a restricted set of cities is supported and daylight savings time is ignored. The goal is to see an example of a typical pattern for using Language Service in which your application must:
-    >   1. Connect to a prediction endpoint.
-    >   2. Submit an utterance to get a prediction.
-    >   3. Implement logic to respond appropriately to the predicted intent and entities.
+    > 1. Connect to a prediction endpoint.
+    > 2. Submit an utterance to get a prediction.
+    > 3. Implement logic to respond appropriately to the predicted intent and entities.
 
 1. When you have finished testing, enter *quit*.
 

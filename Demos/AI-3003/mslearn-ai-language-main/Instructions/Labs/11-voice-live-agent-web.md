@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Develop an Azure AI Voice Live voice agent'
+    title: 'Develop an Azure AI Voice Live voice agent  (deprecated)'
     description: 'Learn how to create a web app to enable real-time voice interactions with an Azure AI Voice Live agent.'
+    islab: false
 ---
 
-# Develop an Azure AI Voice Live voice agent
+# Develop an Azure AI Voice Live voice agent (deprecated)
+
+> **Note**: This exercise is deprecated. Consider completing the replacement exercise at <https://go.microsoft.com/fwlink/?linkid=2356168>.
 
 In this exercise, you complete a Flask-based Python web app based that enables real-time voice interactions with an agent. You add the code to initialize the session, and handle session events. You use a deployment script that: deploys the AI model; creates an image of the app in Azure Container Registry (ACR) using ACR tasks; and then creates an Azure App Service instance that pulls the the image. To test the app you will need an audio device with microphone and speaker capabilities.
 
@@ -14,11 +17,11 @@ While this exercise is based on Python, you can develop similar applications oth
 
 Tasks performed in this exercise:
 
-* Download the base files for the app
-* Add code to complete the web app
-* Review the overall code base
-* Update and run the deployment script
-* View and test the application
+- Download the base files for the app
+- Add code to complete the web app
+- Review the overall code base
+- Update and run the deployment script
+- View and test the application
 
 This exercise takes approximately **30** minutes to complete.
 
@@ -39,7 +42,6 @@ In this section of the exercise you download the a zipped file containing the ba
     ```bash
     mkdir voice-live-web && cd voice-live-web
     ```
-
 
     ```bash
     wget https://github.com/MicrosoftLearning/mslearn-ai-language/raw/refs/heads/main/downloads/python/voice-live-web.zip
@@ -241,9 +243,9 @@ In this section you make a small change to the **azdeploy.sh** deployment script
 
 There are only two values you should change at the top of the **azdeploy.sh** deployment script.
 
-* The **rg** value specifies the resource group to contain the deployment. You can accept the default value, or enter your own value if you need to deploy to a specific resource group.
+- The **rg** value specifies the resource group to contain the deployment. You can accept the default value, or enter your own value if you need to deploy to a specific resource group.
 
-* The **location** value sets the region for the deployment. The *gpt-4o* model used in the exercise can be deployed to other regions, but there can be limits in any particular region. If the deployment fails in your chosen region, try **eastus2** or **swedencentral**.
+- The **location** value sets the region for the deployment. The *gpt-4o* model used in the exercise can be deployed to other regions, but there can be limits in any particular region. If the deployment fails in your chosen region, try **eastus2** or **swedencentral**.
 
     ```
     rg="rg-voicelive" # Replace with your resource group
@@ -276,11 +278,11 @@ The deployment script deploys the AI model and creates the necessary resources i
 
     The deployment should complete in 5-10 minutes. During the deployment you might be prompted for the following information/actions:
 
-    * If you are prompted to authenticate to Azure follow the directions presented to you.
-    * If you are prompted to select a subscription use the arrow keys to highlight your subscription and press **Enter**.
-    * You will likely see some warnings during deployment and these can be ignored.
-    * If the deployment fails during the AI model deployment change the region in the deployment script and try again.
-    * Regions in Azure can get busy at times and interrupt the timing of the deployments. If the deployment fails after the model deployment re-run the deployment script.
+    - If you are prompted to authenticate to Azure follow the directions presented to you.
+    - If you are prompted to select a subscription use the arrow keys to highlight your subscription and press **Enter**.
+    - You will likely see some warnings during deployment and these can be ignored.
+    - If the deployment fails during the AI model deployment change the region in the deployment script and try again.
+    - Regions in Azure can get busy at times and interrupt the timing of the deployments. If the deployment fails after the model deployment re-run the deployment script.
 
 ## View and test the app
 
@@ -292,9 +294,9 @@ When the deployment completes a "Deployment complete!" message will be in the sh
 
 Troubleshooting:
 
-* If the app reports missing environment variables, restart the application in App Service.
-* If you see excessive *audio chunk* messages in the log shown in the application select **Stop session** and then start the session again.
-* If the app fails to function at all, double-check you added all of the code and for proper indentation. If you need to make any changes re-run the deployment and select **option 2** to only update the image.
+- If the app reports missing environment variables, restart the application in App Service.
+- If you see excessive *audio chunk* messages in the log shown in the application select **Stop session** and then start the session again.
+- If the app fails to function at all, double-check you added all of the code and for proper indentation. If you need to make any changes re-run the deployment and select **option 2** to only update the image.
 
 ## Clean up resources
 

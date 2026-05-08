@@ -1,4 +1,1 @@
 python-dotenv
-python-dateutil
-azure-identity
-azure-ai-language-questionanswering

@@ -1,4 +1,2 @@
 python-dotenv
 azure.core
-azure-identity
-azure-cognitiveservices-speech

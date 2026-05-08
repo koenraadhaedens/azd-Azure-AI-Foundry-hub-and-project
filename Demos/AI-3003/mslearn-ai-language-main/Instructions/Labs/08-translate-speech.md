@@ -1,10 +1,13 @@
 ---
 lab:
-    title: 'Translate Speech'
+    title: 'Translate Speech  (deprecated)'
     description: "Translate language speech to speech and implement in your own app."
+    islab: false
 ---
 
-# Translate Speech
+# Translate Speech (deprecated)
+
+> **Note**: This exercise is deprecated. Consider completing the replacement exercise at <https://go.microsoft.com/fwlink/?linkid=2356176>.
 
 Azure AI Speech includes a speech translation API that you can use to translate spoken language. For example, suppose you want to develop a translator application that people can use when traveling in places where they don't speak the local language. They would be able to say phrases such as "Where is the station?" or "I need to find a pharmacy" in their own language, and have it translate them to the local language. In this exercise, you'll use the Azure AI Speech SDK for Python to create a simple application based on this example.
 
@@ -71,8 +74,8 @@ Let's start by creating an Azure AI Speech resource.
 1. Create a Python virtual environment and install the Azure AI Speech SDK package and other required packages by running the following command:
 
     ```
-    python -m venv labenv
-    ./labenv/bin/Activate.ps1
+    python -m venv labenv;
+    ./labenv/bin/Activate.ps1;
     pip install -r requirements.txt azure-cognitiveservices-speech==1.42.0
     ```
 
@@ -250,7 +253,7 @@ In this exercise, the Azure Cloud Shell environment we used doesn't support audi
 ### Using speech synthesis with a speaker
 
 1. If you have a speaker, you can use the following code to synthesize speech.
-    
+
     ```python
    # Synthesize translation
    voices = {
